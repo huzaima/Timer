@@ -8,4 +8,22 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="NumberButtonsStyle" parent="android:Widget.DeviceDefault.Button.Borderless">
+        <item name="android:textSize">@dimen/button_text_size</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+
+    <style name="TimeDisplayStyle">
+        <item name="android:textSize">56sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+
+    <style name="HourMinuteSecond">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+
 </resources>
