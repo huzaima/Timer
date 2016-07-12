@@ -52,6 +52,7 @@ public class SetTimerActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.reset:
                 break;
+            default:
         }
     }
 
