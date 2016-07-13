@@ -3,14 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <picker.ugurtekbas.com.Picker.Picker xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/picktime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.lylc.widget.circularprogressbar.CircularProgressBar
+        android:id="@+id/circularprogressbar"
+        style="@style/Widget.ProgressBar.Holo.CircularProgressBar"
         android:layout_centerInParent="true"
-        app:dialRadius="25dp"
-        app:hourFormat="true"
-        app:trackSize="20dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/start"

@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "co.magency.huzaima.timer"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -20,6 +20,7 @@ android {
 }
 
 repositories {
+    mavenCentral()
     maven {
         url "https://jitpack.io"
     }
@@ -29,6 +30,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.github.ugurtekbas:dialTimePicker:9f4af78e90'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.github.coyarzun89:fabtransitionactivity:0.2.0'
     compile project(':library')
 }
