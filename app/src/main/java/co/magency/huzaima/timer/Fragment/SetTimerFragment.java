@@ -1,44 +1,74 @@
-package co.magency.huzaima.timer;
+package co.magency.huzaima.timer.Fragment;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.github.fabtransitionactivity.SheetLayout;
-
 import java.util.HashMap;
 
-public class SetTimerActivity extends AppCompatActivity implements View.OnClickListener, SheetLayout.OnFabAnimationEndListener {
+import co.magency.huzaima.timer.Activity.CreateTimerActivity;
+import co.magency.huzaima.timer.Interface.OnNextButtonClickListener;
+import co.magency.huzaima.timer.R;
+import co.magency.huzaima.timer.Utilities.AppUtility;
+
+public class SetTimerFragment extends Fragment implements View.OnClickListener {
 
     private Button one, two, three, four, five, six, seven, eight, nine, zero;
-    FloatingActionButton startTimer;
-    SheetLayout sheetLayout;
+    private FloatingActionButton next;
     private int currentDigitCount = 0;
-    ImageButton delete, reset;
-    TextView hour, minute, second;
-    HashMap<Integer, String[]> states;
+    private ImageButton delete, reset;
+    private TextView hour, minute, second;
+    private HashMap<Integer, String[]> states;
+    private OnNextButtonClickListener onNextButtonClickListener;
+
+    public SetTimerFragment() {
+        // Required empty public constructor
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_set_timer);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        initViews();
+        return inflater.inflate(R.layout.fragment_set_timer, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        initViews(view);
         attachListeners();
 
         states = new HashMap<>(6);
     }
 
     @Override
-    protected void onResume() {
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof OnNextButtonClickListener) {
+            onNextButtonClickListener = (OnNextButtonClickListener) context;
+        }
+    }
+
+    @Override
+    public void onResume() {
         super.onResume();
-        if (sheetLayout != null)
-            sheetLayout.contractFab();
+        attachListeners();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        detachListeners();
     }
 
     @Override
@@ -48,7 +78,7 @@ public class SetTimerActivity extends AppCompatActivity implements View.OnClickL
         switch (id) {
             case R.id.zero:
                 if (hour.getText().equals("00") && minute.getText().equals("00") && second.getText().equals("00")) {
-                    startTimer.setEnabled(false);
+                    next.setEnabled(false);
                     break;
                 }
             case R.id.one:
@@ -64,8 +94,7 @@ public class SetTimerActivity extends AppCompatActivity implements View.OnClickL
                 String state[] = new String[]{hour.getText().toString(), minute.getText().toString(), second.getText().toString()};
                 String text = button.getText().toString();
                 if (currentDigitCount == 0) {
-                    startTimer.setEnabled(true);
-                    startTimer.setVisibility(View.VISIBLE);
+                    next.setEnabled(true);
                     second.setText("0" + text);
                     states.put(currentDigitCount, state);
                     currentDigitCount++;
@@ -107,7 +136,7 @@ public class SetTimerActivity extends AppCompatActivity implements View.OnClickL
                     second.setText(state[2]);
                 }
                 if (currentDigitCount == 0)
-                    startTimer.setEnabled(false);
+                    next.setEnabled(false);
                 break;
 
             case R.id.reset:
@@ -115,14 +144,24 @@ public class SetTimerActivity extends AppCompatActivity implements View.OnClickL
                 minute.setText("00");
                 second.setText("00");
                 currentDigitCount = 0;
-                startTimer.setEnabled(false);
+                states.clear();
+                next.setEnabled(false);
                 break;
 
-            case R.id.start_timer:
-                sheetLayout.expandFab();
+            case R.id.next:
+                int targetHour = Integer.parseInt(hour.getText().toString());
+                int targetMinute = Integer.parseInt(minute.getText().toString());
+                int targetSeconds = Integer.parseInt(second.getText().toString());
+
+                Bundle bundle = new Bundle();
+                bundle.putInt(AppUtility.INPUT_SCREEN, AppUtility.TIME_INPUT_SCREEN);
+                bundle.putInt(AppUtility.HOUR, targetHour);
+                bundle.putInt(AppUtility.MINUTE, targetMinute);
+                bundle.putInt(AppUtility.SECOND, targetSeconds);
+                onNextButtonClickListener.buttonClicked(bundle);
+                break;
         }
     }
-
 
     private void shiftLeftSecondDigit(String text) {
         second.setText(second.getText().charAt(1) + text);
@@ -136,33 +175,29 @@ public class SetTimerActivity extends AppCompatActivity implements View.OnClickL
         hour.setText(hour.getText().charAt(1) + "" + minute.getText().charAt(0));
     }
 
-    private void initViews() {
+    private void initViews(View v) {
 
         // Buttons
-        one = (Button) findViewById(R.id.one);
-        two = (Button) findViewById(R.id.two);
-        three = (Button) findViewById(R.id.three);
-        four = (Button) findViewById(R.id.four);
-        five = (Button) findViewById(R.id.five);
-        six = (Button) findViewById(R.id.six);
-        seven = (Button) findViewById(R.id.seven);
-        eight = (Button) findViewById(R.id.eight);
-        nine = (Button) findViewById(R.id.nine);
-        zero = (Button) findViewById(R.id.zero);
-        delete = (ImageButton) findViewById(R.id.delete);
-        reset = (ImageButton) findViewById(R.id.reset);
-        startTimer = (FloatingActionButton) findViewById(R.id.start_timer);
+        one = (Button) v.findViewById(R.id.one);
+        two = (Button) v.findViewById(R.id.two);
+        three = (Button) v.findViewById(R.id.three);
+        four = (Button) v.findViewById(R.id.four);
+        five = (Button) v.findViewById(R.id.five);
+        six = (Button) v.findViewById(R.id.six);
+        seven = (Button) v.findViewById(R.id.seven);
+        eight = (Button) v.findViewById(R.id.eight);
+        nine = (Button) v.findViewById(R.id.nine);
+        zero = (Button) v.findViewById(R.id.zero);
+        delete = (ImageButton) v.findViewById(R.id.delete);
+        reset = (ImageButton) v.findViewById(R.id.reset);
 
-        startTimer.setEnabled(false);
-
-        // SheetLayout for FAB effect
-        sheetLayout = (SheetLayout) findViewById(R.id.bottom_sheet);
-        sheetLayout.setFab(startTimer);
+        // FAB
+        next = CreateTimerActivity.next;
 
         // TextViews
-        hour = (TextView) findViewById(R.id.hour);
-        minute = (TextView) findViewById(R.id.minute);
-        second = (TextView) findViewById(R.id.second);
+        hour = (TextView) v.findViewById(R.id.hour);
+        minute = (TextView) v.findViewById(R.id.minute);
+        second = (TextView) v.findViewById(R.id.second);
 
     }
 
@@ -181,22 +216,28 @@ public class SetTimerActivity extends AppCompatActivity implements View.OnClickL
         zero.setOnClickListener(this);
         delete.setOnClickListener(this);
         reset.setOnClickListener(this);
-        startTimer.setOnClickListener(this);
 
-        //SheetLayout for FAB effect
-        sheetLayout.setFabAnimationEndListener(this);
+        next.setOnClickListener(this);
+        next.setEnabled(false);
+        next.setImageResource(R.drawable.ic_done_white_24px);
+
+        next.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onFabAnimationEnd() {
-        int targetHour = Integer.parseInt(hour.getText().toString());
-        int targetMinute = Integer.parseInt(minute.getText().toString());
-        int targetSeconds = Integer.parseInt(second.getText().toString());
+    private void detachListeners() {
+        one.setOnClickListener(null);
+        two.setOnClickListener(null);
+        three.setOnClickListener(null);
+        four.setOnClickListener(null);
+        five.setOnClickListener(null);
+        six.setOnClickListener(null);
+        seven.setOnClickListener(null);
+        eight.setOnClickListener(null);
+        nine.setOnClickListener(null);
+        zero.setOnClickListener(null);
+        delete.setOnClickListener(null);
+        reset.setOnClickListener(null);
 
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.putExtra(AppUtility.HOUR, targetHour);
-        intent.putExtra(AppUtility.MINUTE, targetMinute);
-        intent.putExtra(AppUtility.SECOND, targetSeconds);
-        startActivity(intent);
+        next.setOnClickListener(null);
     }
 }

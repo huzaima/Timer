@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Timer</string>
+
+    <!-- welcome screen -->
+    <string name="slide_1_title">Timer</string>
+    <string name="slide_1_desc">Use timers in new way</string>
+
+    <string name="slide_2_title">Automate tasks</string>
+    <string name="slide_2_desc">Turn on/off wifi or make call/message to someone when timer stops</string>
+
+    <string name="slide_3_title">Create lapse</string>
+    <string name="slide_3_desc">Set number of lapse, relax, and get notified</string>
+
+    <string name="slide_4_title">Custom notifications</string>
+    <string name="slide_4_desc">Set custom notifications for each timer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
