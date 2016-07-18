@@ -18,7 +18,7 @@ import co.magency.huzaima.timer.Utilities.AppUtility;
 public class SetNameFragment extends Fragment implements View.OnClickListener {
 
     private FloatingActionButton next;
-    private EditText name;
+    private EditText name, lapse;
     private OnNextButtonClickListener onNextButtonClickListener;
 
     public SetNameFragment() {
@@ -64,6 +64,7 @@ public class SetNameFragment extends Fragment implements View.OnClickListener {
 
         // EditText
         name = (EditText) v.findViewById(R.id.timer_name);
+        lapse = (EditText) v.findViewById(R.id.no_of_lapses);
 
         // FAB from parent activity
         next = CreateTimerActivity.next;
@@ -72,7 +73,6 @@ public class SetNameFragment extends Fragment implements View.OnClickListener {
     private void attachListeners() {
         next.setOnClickListener(this);
         next.setEnabled(true);
-        next.setImageResource(R.drawable.ic_navigate_next_white_24px);
     }
 
     private void detachListeners() {
@@ -82,10 +82,19 @@ public class SetNameFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         String tempName = name.getText().toString();
-        if (name != null && !tempName.isEmpty()) {
-            Bundle bundle = new Bundle();
+        int noOfLapse;
+        try {
+            noOfLapse = Integer.parseInt(lapse.getText().toString());
+        } catch (NumberFormatException e) {
+            noOfLapse = 0;
+        }
+
+        Bundle bundle = new Bundle();
+
+        if (!tempName.isEmpty()) {
             bundle.putInt(AppUtility.INPUT_SCREEN, AppUtility.NAME_INPUT_SCREEN);
             bundle.putString(AppUtility.TIMER_NAME, tempName);
+            bundle.putInt(AppUtility.TIMER_LAPSE, noOfLapse);
             onNextButtonClickListener.buttonClicked(bundle);
         } else {
             name.setError("Name cannot be empty");

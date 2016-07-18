@@ -1,0 +1,155 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_gray"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="Notify me via: "
+            android:textColor="@android:color/darker_gray" />
+
+        <RadioGroup
+            android:id="@+id/notify"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/alarm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Alarm"
+                android:textColor="@android:color/darker_gray" />
+
+            <RadioButton
+                android:id="@+id/notification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notification"
+                android:textColor="@android:color/darker_gray" />
+
+
+            <RadioButton
+                android:id="@+id/dont_notify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Don't notify"
+                android:textColor="@android:color/darker_gray" />
+        </RadioGroup>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="4dp"
+            android:background="?android:attr/listDivider"
+            android:foreground="@android:color/darker_gray" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="Notify after: "
+            android:textColor="@android:color/darker_gray" />
+
+        <RadioGroup
+            android:id="@+id/notify_after"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/notify_every_lapse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Every lapse"
+                android:textColor="@android:color/darker_gray" />
+
+            <RadioButton
+                android:id="@+id/notify_after_complete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Timer completes for all lapse(s)"
+                android:textColor="@android:color/darker_gray" />
+
+        </RadioGroup>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="4dp"
+            android:background="?android:attr/listDivider"
+            android:foreground="@android:color/darker_gray" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="After timer:"
+            android:textColor="@android:color/darker_gray" />
+
+        <CheckBox
+            android:id="@+id/wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="Turn WiFi"
+            android:textColor="@android:color/darker_gray" />
+
+        <RadioGroup
+            android:id="@+id/wifi_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <RadioButton
+                android:id="@+id/wifi_on"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:checked="true"
+                android:text="On"
+                android:textColor="@android:color/darker_gray" />
+
+            <RadioButton
+                android:id="@+id/wifi_off"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="Off"
+                android:textColor="@android:color/darker_gray" />
+
+        </RadioGroup>
+
+        <CheckBox
+            android:id="@+id/call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="Call"
+            android:textColor="@android:color/darker_gray" />
+
+        <CheckBox
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="Message"
+            android:textColor="@android:color/darker_gray" />
+
+    </LinearLayout>
+
+</RelativeLayout>

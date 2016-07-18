@@ -219,7 +219,6 @@ public class SetTimerFragment extends Fragment implements View.OnClickListener {
 
         next.setOnClickListener(this);
         next.setEnabled(false);
-        next.setImageResource(R.drawable.ic_done_white_24px);
 
         next.setVisibility(View.VISIBLE);
     }

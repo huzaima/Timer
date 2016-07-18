@@ -21,12 +21,13 @@ public class WelcomeActivity extends OnboarderActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
         preferenceManager = new PreferenceManager(getApplicationContext());
         if (!preferenceManager.isLaunchedFirstTime()) {
             onFinishButtonPressed();
         }
+        super.onCreate(savedInstanceState);
+
         preferenceManager.setIsLaunchedFirstTIme(false);
 
         onBoarderPages = new ArrayList<>();

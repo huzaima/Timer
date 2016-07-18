@@ -14,12 +14,23 @@ public class AppUtility {
     public static final String MINUTE = "MINUTE";
     public static final String SECOND = "SECOND";
     public static final String TIMER_NAME = "TIMER_NAME";
+    public static final String TIMER_LAPSE = "TIMER_LAPSE";
     public static final String INPUT_SCREEN = "INPUT_SCREEN";
     public static final int NAME_INPUT_SCREEN = 1;
     public static final int TIME_INPUT_SCREEN = 2;
-    public static final String PREVIOUS_SCREEN = "PREVIOUS_SCREEN";
+    public static final int NOTIFICATION_INPUT_SCREEN = 3;
     public static final String SET_NAME_FRAGMENT = "SET_NAME_FRAGMENT";
     public static final String SET_TIMER_FRAGMENT = "SET_TIMER_FRAGMENT";
+    public static final String SET_NOTIFICATION_FRAGMENT = "SET_NOTIFICATION_FRAGMENT";
+    public static final String NOTIFICATION_TYPE = "NOTIFICATION_TYPE";
+    public static final String NOTIFICATION_FREQUENCY = "NOTIFICATION_FREQUENCY";
+    public static final String WIFI_STATE = "WIFI_STATE";
+    public static final String WIFI = "WIFI";
+    public static final String AFTER_COMPLETE_TIMER = "AFTER_COMPLETE_TIMER";
+    public static final String AFTER_EVERY_LAPSE = "AFTER_EVERY_LAPSE";
+    public static final String DONT_NOTIFY = "DONT_NOTIFY";
+    public static final String NOTIFICATION_ONLY = "NOTIFICATION_ONLY";
+    public static final String ALARM = "ALARM";
 
     public static final String SHARED_PREFERENCE_NAME = "co.magency.huzaima.timer-welcome";
     public static final String IS_LAUNCED_FIRST_TIME = "co.magency.huzaima.timer-first_time";
