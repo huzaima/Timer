@@ -21,11 +21,10 @@
         android:src="@drawable/ic_add_white_24px" />
 
     <com.github.fabtransitionactivity.SheetLayout
-        android:id="@+id/bottom_sheet"
+        android:id="@+id/sheet_wrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
-        android:elevation="2dp"
         app:ft_color="@color/colorPrimary"
         app:ft_container_gravity="center" />
 

@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.github.fabtransitionactivity.SheetLayout;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import co.magency.huzaima.timer.Fragment.SetNameFragment;
 import co.magency.huzaima.timer.Fragment.SetNotificationFragment;
 import co.magency.huzaima.timer.Fragment.SetTimerFragment;
@@ -19,12 +21,15 @@ import io.realm.Realm;
 
 public class CreateTimerActivity extends AppCompatActivity implements OnNextButtonClickListener, SheetLayout.OnFabAnimationEndListener {
 
-    public static FloatingActionButton next;
+    @BindView(R.id.next)
+    public FloatingActionButton next;
+    @BindView(R.id.bottom_sheet)
+    public SheetLayout sheetLayout;
     private Timer timer;
-    private SheetLayout sheetLayout;
     private SetNameFragment setNameFragment;
     private SetTimerFragment setTimerFragment;
     private SetNotificationFragment setNotificationFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +37,9 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_timer);
 
-        initViews();
+        ButterKnife.bind(this);
+
+        sheetLayout.setFab(next);
 
         setNameFragment = new SetNameFragment();
         setTimerFragment = new SetTimerFragment();
@@ -42,16 +49,6 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
         fragmentTransaction.replace(R.id.placeholder, setNameFragment, AppUtility.SET_NAME_FRAGMENT);
         fragmentTransaction.commit();
 
-    }
-
-    private void initViews() {
-
-        // FAB
-        next = (FloatingActionButton) findViewById(R.id.next);
-
-        // Sheet animation for FAB
-        sheetLayout = (SheetLayout) findViewById(R.id.bottom_sheet);
-        sheetLayout.setFab(next);
     }
 
     @Override

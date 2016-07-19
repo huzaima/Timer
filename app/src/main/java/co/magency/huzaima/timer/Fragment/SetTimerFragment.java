@@ -14,20 +14,50 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
-import co.magency.huzaima.timer.Activity.CreateTimerActivity;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import co.magency.huzaima.timer.Interface.OnNextButtonClickListener;
 import co.magency.huzaima.timer.R;
 import co.magency.huzaima.timer.Utilities.AppUtility;
 
 public class SetTimerFragment extends Fragment implements View.OnClickListener {
 
-    private Button one, two, three, four, five, six, seven, eight, nine, zero;
+    @BindView(R.id.one)
+    public Button one;
+    @BindView(R.id.two)
+    public Button two;
+    @BindView(R.id.three)
+    public Button three;
+    @BindView(R.id.four)
+    public Button four;
+    @BindView(R.id.five)
+    public Button five;
+    @BindView(R.id.six)
+    public Button six;
+    @BindView(R.id.seven)
+    public Button seven;
+    @BindView(R.id.eight)
+    public Button eight;
+    @BindView(R.id.nine)
+    public Button nine;
+    @BindView(R.id.zero)
+    public Button zero;
+    @BindView(R.id.delete)
+    public ImageButton delete;
+    @BindView(R.id.reset)
+    public ImageButton reset;
+    @BindView(R.id.hour)
+    public TextView hour;
+    @BindView(R.id.minute)
+    public TextView minute;
+    @BindView(R.id.second)
+    public TextView second;
     private FloatingActionButton next;
     private int currentDigitCount = 0;
-    private ImageButton delete, reset;
-    private TextView hour, minute, second;
     private HashMap<Integer, String[]> states;
     private OnNextButtonClickListener onNextButtonClickListener;
+    private Unbinder unbinder;
 
     public SetTimerFragment() {
         // Required empty public constructor
@@ -44,7 +74,8 @@ public class SetTimerFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initViews(view);
+        unbinder = ButterKnife.bind(this, view);
+        next = (FloatingActionButton) getActivity().findViewById(R.id.next);
         attachListeners();
 
         states = new HashMap<>(6);
@@ -69,6 +100,12 @@ public class SetTimerFragment extends Fragment implements View.OnClickListener {
     public void onPause() {
         super.onPause();
         detachListeners();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override
@@ -173,32 +210,6 @@ public class SetTimerFragment extends Fragment implements View.OnClickListener {
 
     private void shiftLeftHourDigit() {
         hour.setText(hour.getText().charAt(1) + "" + minute.getText().charAt(0));
-    }
-
-    private void initViews(View v) {
-
-        // Buttons
-        one = (Button) v.findViewById(R.id.one);
-        two = (Button) v.findViewById(R.id.two);
-        three = (Button) v.findViewById(R.id.three);
-        four = (Button) v.findViewById(R.id.four);
-        five = (Button) v.findViewById(R.id.five);
-        six = (Button) v.findViewById(R.id.six);
-        seven = (Button) v.findViewById(R.id.seven);
-        eight = (Button) v.findViewById(R.id.eight);
-        nine = (Button) v.findViewById(R.id.nine);
-        zero = (Button) v.findViewById(R.id.zero);
-        delete = (ImageButton) v.findViewById(R.id.delete);
-        reset = (ImageButton) v.findViewById(R.id.reset);
-
-        // FAB
-        next = CreateTimerActivity.next;
-
-        // TextViews
-        hour = (TextView) v.findViewById(R.id.hour);
-        minute = (TextView) v.findViewById(R.id.minute);
-        second = (TextView) v.findViewById(R.id.second);
-
     }
 
     private void attachListeners() {

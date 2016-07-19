@@ -10,16 +10,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import co.magency.huzaima.timer.Activity.CreateTimerActivity;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import co.magency.huzaima.timer.Interface.OnNextButtonClickListener;
 import co.magency.huzaima.timer.R;
 import co.magency.huzaima.timer.Utilities.AppUtility;
 
 public class SetNameFragment extends Fragment implements View.OnClickListener {
 
-    private FloatingActionButton next;
-    private EditText name, lapse;
+    public FloatingActionButton next;
+    @BindView(R.id.timer_name)
+    public EditText name;
+    @BindView(R.id.no_of_lapses)
+    public EditText lapse;
     private OnNextButtonClickListener onNextButtonClickListener;
+    private Unbinder unbinder;
 
     public SetNameFragment() {
         // Required empty public constructor
@@ -36,7 +42,8 @@ public class SetNameFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initViews(view);
+        unbinder = ButterKnife.bind(this, view);
+        next = (FloatingActionButton) getActivity().findViewById(R.id.next);
     }
 
     @Override
@@ -60,14 +67,10 @@ public class SetNameFragment extends Fragment implements View.OnClickListener {
         detachListeners();
     }
 
-    private void initViews(View v) {
-
-        // EditText
-        name = (EditText) v.findViewById(R.id.timer_name);
-        lapse = (EditText) v.findViewById(R.id.no_of_lapses);
-
-        // FAB from parent activity
-        next = CreateTimerActivity.next;
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void attachListeners() {

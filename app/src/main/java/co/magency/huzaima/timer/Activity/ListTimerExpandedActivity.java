@@ -12,7 +12,6 @@ public class ListTimerExpandedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_timer_expanded);
 
-
     }
 
     @Override

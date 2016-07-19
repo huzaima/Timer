@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import co.magency.huzaima.timer.Interface.OnItemClickListener;
 import co.magency.huzaima.timer.Model.Timer;
 import co.magency.huzaima.timer.R;
@@ -57,14 +59,18 @@ public class TimerRecyclerViewAdapter extends RealmRecyclerViewAdapter<Timer,
 
     public class TimerViewHolder extends RecyclerView.ViewHolder {
 
-        TextView timerName, timerTime, timerLapse, timerNotification;
+        @BindView(R.id.timer_name)
+        TextView timerName;
+        @BindView(R.id.timer_time)
+        TextView timerTime;
+        @BindView(R.id.timer_lapse)
+        TextView timerLapse;
+        @BindView(R.id.timer_notification)
+        TextView timerNotification;
 
         TimerViewHolder(View v) {
             super(v);
-            timerName = (TextView) v.findViewById(R.id.timer_name);
-            timerTime = (TextView) v.findViewById(R.id.timer_time);
-            timerLapse = (TextView) v.findViewById(R.id.timer_lapse);
-            timerNotification = (TextView) v.findViewById(R.id.timer_notification);
+            ButterKnife.bind(this, v);
         }
 
         public void attachListener(final Timer timer, final OnItemClickListener listener1) {

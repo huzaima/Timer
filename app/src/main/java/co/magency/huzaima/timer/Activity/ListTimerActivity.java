@@ -17,6 +17,8 @@ import android.view.View;
 import com.github.fabtransitionactivity.SheetLayout;
 import com.wooplr.spotlight.SpotlightView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import co.magency.huzaima.timer.Adapter.TimerRecyclerViewAdapter;
 import co.magency.huzaima.timer.Interface.OnItemClickListener;
 import co.magency.huzaima.timer.Model.Timer;
@@ -28,9 +30,12 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
         SheetLayout.OnFabAnimationEndListener,
         OnItemClickListener {
 
-    private FloatingActionButton addTimer;
-    private SheetLayout sheetLayout;
-    private RecyclerView recyclerView;
+    @BindView(R.id.add_timer)
+    public FloatingActionButton addTimer;
+    @BindView(R.id.timer_list)
+    public RecyclerView recyclerView;
+    @BindView(R.id.sheet_wrapper)
+    public SheetLayout sheetLayout;
     private TimerRecyclerViewAdapter timerRecyclerViewAdapter;
 
     @Override
@@ -38,7 +43,7 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_timer);
 
-        initViews();
+        ButterKnife.bind(this);
 
         new SpotlightView.Builder(this)
                 .enableRevalAnimation(true)
@@ -51,6 +56,11 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
                 .usageId("fab_spotlight")
                 .target(addTimer)
                 .show();
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getApplicationContext(),
+                AppUtility.realm.where(Timer.class).findAllAsync());
+        recyclerView.setAdapter(timerRecyclerViewAdapter);
     }
 
     @Override
@@ -64,7 +74,6 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onPause() {
         super.onPause();
-        detachListeners();
     }
 
     @Override
@@ -126,27 +135,11 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
         return true;
     }
 
-    public void initViews() {
-        addTimer = (FloatingActionButton) findViewById(R.id.add_timer);
-        sheetLayout = (SheetLayout) findViewById(R.id.bottom_sheet);
-
-        // RecyclerView
-        recyclerView = (RecyclerView) findViewById(R.id.timer_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getApplicationContext(),
-                AppUtility.realm.where(Timer.class).findAllAsync());
-        recyclerView.setAdapter(timerRecyclerViewAdapter);
-    }
-
     public void attachListeners() {
         addTimer.setOnClickListener(this);
         sheetLayout.setFab(addTimer);
         sheetLayout.setFabAnimationEndListener(this);
         timerRecyclerViewAdapter.setOnItemClickListener(this);
-    }
-
-    public void detachListeners() {
-        addTimer.setOnClickListener(null);
     }
 
     @Override

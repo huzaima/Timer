@@ -12,18 +12,31 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.RadioGroup;
 
-import co.magency.huzaima.timer.Activity.CreateTimerActivity;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import co.magency.huzaima.timer.Interface.OnNextButtonClickListener;
 import co.magency.huzaima.timer.R;
 import co.magency.huzaima.timer.Utilities.AppUtility;
 
 public class SetNotificationFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
 
-    private CheckBox wifi, call, message;
-    private RadioGroup notify, notifyAfter, wifiState;
-    private OnNextButtonClickListener nextButtonClickListener;
-    private Bundle bundle = new Bundle();
+    @BindView(R.id.wifi)
+    public CheckBox wifi;
+    @BindView(R.id.call)
+    public CheckBox call;
+    @BindView(R.id.message)
+    public CheckBox message;
+    @BindView(R.id.notify)
+    public RadioGroup notify;
+    @BindView(R.id.notify_after)
+    public RadioGroup notifyAfter;
+    @BindView(R.id.wifi_state)
+    public RadioGroup wifiState;
     private FloatingActionButton next;
+    private Bundle bundle = new Bundle();
+    private OnNextButtonClickListener nextButtonClickListener;
+    private Unbinder unbinder;
 
     public SetNotificationFragment() {
         // Required empty public constructor
@@ -40,7 +53,8 @@ public class SetNotificationFragment extends Fragment implements RadioGroup.OnCh
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        initViews(view);
+        unbinder = ButterKnife.bind(this, view);
+        next = (FloatingActionButton) getActivity().findViewById(R.id.next);
         bundle.putInt(AppUtility.INPUT_SCREEN, AppUtility.NOTIFICATION_INPUT_SCREEN);
         bundle.putString(AppUtility.NOTIFICATION_TYPE, AppUtility.ALARM);
         bundle.putString(AppUtility.NOTIFICATION_FREQUENCY, AppUtility.AFTER_EVERY_LAPSE);
@@ -55,23 +69,6 @@ public class SetNotificationFragment extends Fragment implements RadioGroup.OnCh
         }
     }
 
-    private void initViews(View v) {
-
-        // CheckBox
-        wifi = (CheckBox) v.findViewById(R.id.wifi);
-        call = (CheckBox) v.findViewById(R.id.call);
-        message = (CheckBox) v.findViewById(R.id.message);
-
-        // FAB
-        next = CreateTimerActivity.next;
-
-        // RadioGroup
-        notify = (RadioGroup) v.findViewById(R.id.notify);
-        notifyAfter = (RadioGroup) v.findViewById(R.id.notify_after);
-        wifiState = (RadioGroup) v.findViewById(R.id.wifi_state);
-
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -82,6 +79,12 @@ public class SetNotificationFragment extends Fragment implements RadioGroup.OnCh
     public void onPause() {
         super.onPause();
         detachListeners();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void attachListeners() {
