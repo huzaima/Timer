@@ -3,6 +3,7 @@ package co.magency.huzaima.timer.Utilities;
 import android.content.Context;
 import android.widget.Toast;
 
+import co.magency.huzaima.timer.Model.Timer;
 import io.realm.Realm;
 
 /**
@@ -26,18 +27,35 @@ public class AppUtility {
     public static final String NOTIFICATION_FREQUENCY = "NOTIFICATION_FREQUENCY";
     public static final String WIFI_STATE = "WIFI_STATE";
     public static final String WIFI = "WIFI";
-    public static final String AFTER_COMPLETE_TIMER = "AFTER_COMPLETE_TIMER";
-    public static final String AFTER_EVERY_LAPSE = "AFTER_EVERY_LAPSE";
+    public static final String AFTER_COMPLETE_TIMER = "After Complete Timer";
+    public static final String AFTER_EVERY_LAPSE = "After Every Lapse";
     public static final String DONT_NOTIFY = "DONT_NOTIFY";
-    public static final String NOTIFICATION_ONLY = "NOTIFICATION_ONLY";
-    public static final String ALARM = "ALARM";
+    public static final String NOTIFICATION_ONLY = "Notification";
+    public static final String ALARM = "Alarm";
+    public static final String TIMER_OBJECT = "TIMER_OBJECT";
 
+    // SharedPreferences keys
     public static final String SHARED_PREFERENCE_NAME = "co.magency.huzaima.timer-welcome";
     public static final String IS_LAUNCED_FIRST_TIME = "co.magency.huzaima.timer-first_time";
 
+    // Realm database column name for class Timer
+    public static final String TIMER_COLUMN_NAME = "name";
+    public static final String TIMER_COLUMN_CREATED_AT = "createdAt";
+    public static final String TIMER_COLUMN_DURATION = "duration";
+
+    // RecyclerView populate sort order
+    public static String TIMER_LIST_SORT_BY;
+    public static io.realm.Sort TIMER_LIST_SORT_ORDER;
+
+    public static Timer timer;
+
     public static Realm realm;
 
-    public static void showToast(Context context, String text) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+    public static Context context;
+
+    public static void showToast(String text) {
+        if (AppUtility.context != null) {
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+        }
     }
 }

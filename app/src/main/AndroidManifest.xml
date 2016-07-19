@@ -21,6 +21,7 @@
         </activity>
         <activity android:name=".Activity.CreateTimerActivity" />
         <activity android:name=".Activity.ListTimerActivity" />
+        <activity android:name=".Activity.ListTimerExpandedActivity"></activity>
     </application>
 
 </manifest>

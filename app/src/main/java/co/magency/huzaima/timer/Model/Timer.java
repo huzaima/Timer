@@ -1,5 +1,7 @@
 package co.magency.huzaima.timer.Model;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
@@ -15,7 +17,9 @@ public class Timer extends RealmObject {
     private int hour;
     private int minute;
     private int second;
+    private int duration; // in seconds
     private int noOfLapse;
+    private Date createdAt;
     private String alertType;
     private String alertFrequency;
     private Timer_WifiState wifiState;
@@ -23,32 +27,11 @@ public class Timer extends RealmObject {
     private Timer_Message message;
 
     public Timer() {
-
+        createdAt = new Date();
     }
 
-    public Timer(String name, int hour, int minute, int second, int noOfLapse) {
-        this.name = name;
-        this.hour = hour;
-        this.minute = minute;
-        this.second = second;
-        this.noOfLapse = noOfLapse;
-        wifiState = null;
-        call = null;
-        message = null;
-    }
-
-    public Timer(String name, int hour, int minute, int second, int noOfLapse, String alertType,
-                 String alertFrequency, Timer_WifiState wifiState, Timer_Call call, Timer_Message message) {
-        this.name = name;
-        this.hour = hour;
-        this.minute = minute;
-        this.second = second;
-        this.noOfLapse = noOfLapse;
-        this.alertType = alertType;
-        this.alertFrequency = alertFrequency;
-        this.wifiState = wifiState;
-        this.call = call;
-        this.message = message;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
     public String getAlertType() {
@@ -97,6 +80,7 @@ public class Timer extends RealmObject {
 
     public void setHour(int hour) {
         this.hour = hour;
+        duration = hour * 60 * 60 + minute * 60 + second;
     }
 
     public int getMinute() {
@@ -105,6 +89,7 @@ public class Timer extends RealmObject {
 
     public void setMinute(int minute) {
         this.minute = minute;
+        duration = hour * 60 * 60 + minute * 60 + second;
     }
 
     public int getSecond() {
@@ -113,6 +98,7 @@ public class Timer extends RealmObject {
 
     public void setSecond(int second) {
         this.second = second;
+        duration = hour * 60 * 60 + minute * 60 + second;
     }
 
     public String getName() {

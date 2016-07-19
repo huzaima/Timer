@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:windowContentTransitions">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -11,6 +12,7 @@
 
     <style name="AppThemeWithActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowFullscreen">false</item>
+        <item name="android:windowContentTransitions">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -18,19 +20,19 @@
 
     <style name="NumberButtonsStyle" parent="android:Widget.DeviceDefault.Button.Borderless">
         <item name="android:textSize">@dimen/button_text_size</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@android:color/holo_blue_dark</item>
         <item name="android:fontFamily">sans-serif-thin</item>
     </style>
 
     <style name="TimeDisplayStyle">
         <item name="android:textSize">64sp</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@android:color/holo_blue_dark</item>
         <item name="android:fontFamily">sans-serif-thin</item>
     </style>
 
     <style name="HourMinuteSecond">
         <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@android:color/holo_blue_dark</item>
         <item name="android:fontFamily">sans-serif-thin</item>
     </style>
 

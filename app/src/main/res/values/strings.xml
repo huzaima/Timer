@@ -14,7 +14,19 @@
     <string name="slide_4_title">Custom notifications</string>
     <string name="slide_4_desc">Set custom notifications for each timer</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="notify_text">Notify me via <i>%s</i> after <i>%s</i></string>
+    <string name="lapse_text">Lapse(s): %d</string>
+
+    <string-array name="sort_order">
+        <item>Created (old to new)</item>
+        <item>Created (new to old)</item>
+        <item>Name (Ascending)</item>
+        <item>Name (Descending)</item>
+        <item>Duration (min to max)</item>
+        <item>Duration (max to min)"</item>
+    </string-array>
+
+    <!--string for transition-->
+    <string name="timer_name_card">timer_name_card</string>
 
 </resources>

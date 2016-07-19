@@ -2,9 +2,6 @@ package co.magency.huzaima.timer.Application;
 
 import android.app.Application;
 
-import com.facebook.stetho.Stetho;
-import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
-
 import co.magency.huzaima.timer.Utilities.AppUtility;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -17,11 +14,6 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Stetho.initialize(
-                Stetho.newInitializerBuilder(this)
-                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).withMetaTables().build())
-                        .build());
 
         RealmConfiguration realmConfiguration = new RealmConfiguration
                 .Builder(getApplicationContext())
@@ -30,6 +22,8 @@ public class MyApplication extends Application {
                 .build();
 
         AppUtility.realm = Realm.getInstance(realmConfiguration);
+
+        AppUtility.context = getApplicationContext();
     }
 
 }

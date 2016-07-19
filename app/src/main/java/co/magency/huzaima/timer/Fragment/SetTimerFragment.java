@@ -158,7 +158,7 @@ public class SetTimerFragment extends Fragment implements View.OnClickListener {
                 bundle.putInt(AppUtility.HOUR, targetHour);
                 bundle.putInt(AppUtility.MINUTE, targetMinute);
                 bundle.putInt(AppUtility.SECOND, targetSeconds);
-                onNextButtonClickListener.buttonClicked(bundle);
+                onNextButtonClickListener.onNextButtonClicked(bundle);
                 break;
         }
     }

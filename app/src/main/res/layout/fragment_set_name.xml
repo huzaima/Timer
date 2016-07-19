@@ -1,7 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_gray"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -13,14 +12,13 @@
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin">
 
-        <com.fadeedittext.FadeEditText
+        <EditText
             android:id="@+id/timer_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter Name:"
             android:maxLength="140"
-            android:singleLine="true"
-            android:textColor="@android:color/darker_gray" />
+            android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -31,17 +29,15 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginTop="8dp">
 
-        <com.fadeedittext.FadeEditText
+        <EditText
             android:id="@+id/no_of_lapses"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter Number of Lapse(s):"
             android:inputType="number"
             android:maxLength="2"
-            android:singleLine="true"
-            android:textColor="@android:color/darker_gray" />
+            android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
-
 
 </LinearLayout>

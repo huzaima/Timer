@@ -69,6 +69,7 @@ public class SetNotificationFragment extends Fragment implements RadioGroup.OnCh
         notify = (RadioGroup) v.findViewById(R.id.notify);
         notifyAfter = (RadioGroup) v.findViewById(R.id.notify_after);
         wifiState = (RadioGroup) v.findViewById(R.id.wifi_state);
+
     }
 
     @Override
@@ -133,21 +134,32 @@ public class SetNotificationFragment extends Fragment implements RadioGroup.OnCh
             case R.id.message:
                 break;
             case R.id.next:
-                nextButtonClickListener.buttonClicked(bundle);
+                nextButtonClickListener.onNextButtonClicked(bundle);
         }
     }
+
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.dont_notify:
                 bundle.putString(AppUtility.NOTIFICATION_TYPE, AppUtility.DONT_NOTIFY);
+                for (int i = 0; i < notifyAfter.getChildCount(); i++) {
+                    notifyAfter.getChildAt(i).setEnabled(false);
+                }
                 break;
             case R.id.notification:
                 bundle.putString(AppUtility.NOTIFICATION_TYPE, AppUtility.NOTIFICATION_ONLY);
+
+                for (int i = 0; i < notifyAfter.getChildCount(); i++) {
+                    notifyAfter.getChildAt(i).setEnabled(true);
+                }
                 break;
             case R.id.alarm:
                 bundle.putString(AppUtility.NOTIFICATION_TYPE, AppUtility.ALARM);
+                for (int i = 0; i < notifyAfter.getChildCount(); i++) {
+                    notifyAfter.getChildAt(i).setEnabled(true);
+                }
                 break;
             case R.id.notify_every_lapse:
                 bundle.putString(AppUtility.NOTIFICATION_FREQUENCY, AppUtility.AFTER_EVERY_LAPSE);

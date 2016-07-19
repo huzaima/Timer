@@ -1,7 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_gray"
     android:orientation="vertical">
 
     <LinearLayout
@@ -17,8 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="4dp"
-            android:text="Notify me via: "
-            android:textColor="@android:color/darker_gray" />
+            android:text="Notify me via: " />
 
         <RadioGroup
             android:id="@+id/notify"
@@ -30,38 +28,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Alarm"
-                android:textColor="@android:color/darker_gray" />
+                android:text="Alarm" />
 
             <RadioButton
                 android:id="@+id/notification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Notification"
-                android:textColor="@android:color/darker_gray" />
+                android:text="Notification" />
 
 
             <RadioButton
                 android:id="@+id/dont_notify"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Don't notify"
-                android:textColor="@android:color/darker_gray" />
+                android:text="Don't notify" />
         </RadioGroup>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_margin="4dp"
-            android:background="?android:attr/listDivider"
-            android:foreground="@android:color/darker_gray" />
+            android:background="?android:attr/listDivider" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="4dp"
-            android:text="Notify after: "
-            android:textColor="@android:color/darker_gray" />
+            android:text="Notify after: " />
 
         <RadioGroup
             android:id="@+id/notify_after"
@@ -73,15 +66,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Every lapse"
-                android:textColor="@android:color/darker_gray" />
+                android:text="Every lapse" />
 
             <RadioButton
                 android:id="@+id/notify_after_complete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Timer completes for all lapse(s)"
-                android:textColor="@android:color/darker_gray" />
+                android:text="Timer completes for all lapse(s)" />
 
         </RadioGroup>
 
@@ -89,23 +80,20 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_margin="4dp"
-            android:background="?android:attr/listDivider"
-            android:foreground="@android:color/darker_gray" />
+            android:background="?android:attr/listDivider" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="4dp"
-            android:text="After timer:"
-            android:textColor="@android:color/darker_gray" />
+            android:text="After timer:" />
 
         <CheckBox
             android:id="@+id/wifi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:text="Turn WiFi"
-            android:textColor="@android:color/darker_gray" />
+            android:text="Turn WiFi" />
 
         <RadioGroup
             android:id="@+id/wifi_state"
@@ -121,16 +109,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
                 android:checked="true"
-                android:text="On"
-                android:textColor="@android:color/darker_gray" />
+                android:text="On" />
 
             <RadioButton
                 android:id="@+id/wifi_off"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:text="Off"
-                android:textColor="@android:color/darker_gray" />
+                android:text="Off" />
 
         </RadioGroup>
 
@@ -139,16 +125,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:text="Call"
-            android:textColor="@android:color/darker_gray" />
+            android:text="Call" />
 
         <CheckBox
             android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:text="Message"
-            android:textColor="@android:color/darker_gray" />
+            android:text="Message" />
 
     </LinearLayout>
 

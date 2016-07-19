@@ -1,6 +1,5 @@
 package co.magency.huzaima.timer.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
@@ -23,7 +22,6 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
     public static FloatingActionButton next;
     private Timer timer;
     private SheetLayout sheetLayout;
-    private Intent intent;
     private SetNameFragment setNameFragment;
     private SetTimerFragment setTimerFragment;
     private SetNotificationFragment setNotificationFragment;
@@ -35,9 +33,6 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
         setContentView(R.layout.activity_create_timer);
 
         initViews();
-        timer = new Timer();
-
-        intent = new Intent(getApplicationContext(), TimerActivity.class);
 
         setNameFragment = new SetNameFragment();
         setTimerFragment = new SetTimerFragment();
@@ -76,10 +71,11 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
     }
 
     @Override
-    public void buttonClicked(Bundle bundle) {
+    public void onNextButtonClicked(Bundle bundle) {
 
         final int SCREEN = bundle.getInt(AppUtility.INPUT_SCREEN);
         if (SCREEN == AppUtility.NAME_INPUT_SCREEN) {
+            timer = new Timer();
             timer.setName(bundle.getString(AppUtility.TIMER_NAME));
             timer.setNoOfLapse(bundle.getInt(AppUtility.TIMER_LAPSE));
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -91,10 +87,6 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
             timer.setMinute(bundle.getInt(AppUtility.MINUTE));
             timer.setSecond(bundle.getInt(AppUtility.SECOND));
             timer.setNoOfLapse(bundle.getInt(AppUtility.TIMER_LAPSE));
-
-            intent.putExtra(AppUtility.HOUR, bundle.getInt(AppUtility.HOUR));
-            intent.putExtra(AppUtility.MINUTE, bundle.getInt(AppUtility.MINUTE));
-            intent.putExtra(AppUtility.SECOND, bundle.getInt(AppUtility.SECOND));
 
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.placeholder, setNotificationFragment, AppUtility.SET_NOTIFICATION_FRAGMENT);
@@ -124,13 +116,13 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
                 }
             });
 
-            sheetLayout.expandFab();
+            //sheetLayout.expandFab();
+            finish();
         }
     }
 
     @Override
     public void onFabAnimationEnd() {
-        startActivity(intent);
         finish();
     }
 }
