@@ -33,6 +33,10 @@ public class AppUtility {
     public static final String NOTIFICATION_ONLY = "Notification";
     public static final String ALARM = "Alarm";
     public static final String TIMER_OBJECT = "TIMER_OBJECT";
+    public static final int NEW_TIMER_CREATED = 1;
+    public static final String CALL_TO = "CALL_TO";
+    public static final String MESSAGE_TO = "MESSAGE_TO";
+    public static final String MESSAGE_TEXT = "MESSAGE";
 
     // SharedPreferences keys
     public static final String SHARED_PREFERENCE_NAME = "co.magency.huzaima.timer-welcome";

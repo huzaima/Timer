@@ -2,6 +2,7 @@ package co.magency.huzaima.timer.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -59,7 +60,11 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getApplicationContext(),
-                AppUtility.realm.where(Timer.class).findAllAsync());
+                AppUtility.realm.where(Timer.class).findAll());
+        if (timerRecyclerViewAdapter.getData().size() > 0) {
+            findViewById(R.id.no_timers_added).setVisibility(View.GONE);
+        }
+
         recyclerView.setAdapter(timerRecyclerViewAdapter);
     }
 
@@ -69,6 +74,12 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
         attachListeners();
         if (sheetLayout != null && sheetLayout.isFabExpanded())
             sheetLayout.contractFab();
+
+        if (timerRecyclerViewAdapter != null && timerRecyclerViewAdapter.getData().size() > 0) {
+            findViewById(R.id.no_timers_added).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.no_timers_added).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -146,9 +157,14 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
     public void onItemClick(Timer timer) {
         Intent intent = new Intent(getApplicationContext(), ListTimerExpandedActivity.class);
         AppUtility.timer = timer;
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-                findViewById(R.id.id_tansition), getString(R.string.timer_name_card));
-        startActivity(intent, options.toBundle());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                    findViewById(R.id.id_tansition), getString(R.string.timer_name_card));
+            startActivity(intent, options.toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 
     @Override

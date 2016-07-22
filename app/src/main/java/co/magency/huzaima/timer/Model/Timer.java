@@ -28,6 +28,9 @@ public class Timer extends RealmObject {
 
     public Timer() {
         createdAt = new Date();
+        wifiState = null;
+        call = null;
+        message = null;
     }
 
     public Date getCreatedAt() {

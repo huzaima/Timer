@@ -10,6 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <TextView
+        android:id="@+id/no_timers_added"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:fontFamily="sans-serif-thin"
+        android:text="There are no timers"
+        android:textSize="24sp" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_timer"
         android:layout_width="wrap_content"

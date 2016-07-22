@@ -1,5 +1,6 @@
 package co.magency.huzaima.timer.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
@@ -14,6 +15,8 @@ import co.magency.huzaima.timer.Fragment.SetNotificationFragment;
 import co.magency.huzaima.timer.Fragment.SetTimerFragment;
 import co.magency.huzaima.timer.Interface.OnNextButtonClickListener;
 import co.magency.huzaima.timer.Model.Timer;
+import co.magency.huzaima.timer.Model.Timer_Call;
+import co.magency.huzaima.timer.Model.Timer_Message;
 import co.magency.huzaima.timer.Model.Timer_WifiState;
 import co.magency.huzaima.timer.R;
 import co.magency.huzaima.timer.Utilities.AppUtility;
@@ -23,8 +26,6 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
 
     @BindView(R.id.next)
     public FloatingActionButton next;
-    @BindView(R.id.bottom_sheet)
-    public SheetLayout sheetLayout;
     private Timer timer;
     private SetNameFragment setNameFragment;
     private SetTimerFragment setTimerFragment;
@@ -39,8 +40,6 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
 
         ButterKnife.bind(this);
 
-        sheetLayout.setFab(next);
-
         setNameFragment = new SetNameFragment();
         setTimerFragment = new SetTimerFragment();
         setNotificationFragment = new SetNotificationFragment();
@@ -54,9 +53,6 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
     @Override
     protected void onResume() {
         super.onResume();
-        sheetLayout.setFabAnimationEndListener(this);
-        if (sheetLayout != null && sheetLayout.isFabExpanded())
-            sheetLayout.contractFab();
     }
 
     @Override
@@ -92,11 +88,19 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
 
         } else if (SCREEN == AppUtility.NOTIFICATION_INPUT_SCREEN) {
 
-            boolean wifi = bundle.getBoolean(AppUtility.WIFI, false);
-
-            if (wifi) {
+            if (bundle.containsKey(AppUtility.WIFI)) {
                 Timer_WifiState wifiState = new Timer_WifiState(bundle.getBoolean(AppUtility.WIFI_STATE));
                 timer.setWifiState(wifiState);
+            }
+
+            if (bundle.containsKey(AppUtility.CALL_TO)) {
+                Timer_Call call = new Timer_Call(bundle.getString(AppUtility.CALL_TO));
+                timer.setCall(call);
+            }
+
+            if (bundle.containsKey(AppUtility.MESSAGE_TO) && bundle.containsKey(AppUtility.MESSAGE_TEXT)) {
+                Timer_Message message = new Timer_Message(bundle.getString(AppUtility.MESSAGE_TO), bundle.getString(AppUtility.MESSAGE_TEXT));
+                timer.setMessage(message);
             }
 
             String alertType = bundle.getString(AppUtility.NOTIFICATION_TYPE);
@@ -110,10 +114,12 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
                 @Override
                 public void execute(Realm realm) {
                     realm.copyToRealm(timer);
+                    AppUtility.timer = timer;
                 }
             });
 
-            //sheetLayout.expandFab();
+            Intent intent = new Intent(getApplicationContext(), ListTimerExpandedActivity.class);
+            startActivity(intent);
             finish();
         }
     }
