@@ -4,7 +4,6 @@ import android.content.Context;
 import android.widget.Toast;
 
 import co.magency.huzaima.timer.Model.Timer;
-import io.realm.Realm;
 
 /**
  * Created by Huzaima Khan on 7/13/2016.
@@ -37,6 +36,8 @@ public class AppUtility {
     public static final String CALL_TO = "CALL_TO";
     public static final String MESSAGE_TO = "MESSAGE_TO";
     public static final String MESSAGE_TEXT = "MESSAGE";
+    public static final String ALARM_TIME = "ALARM_TIME";
+    public static String CURRENT_LAP = "CURRENT_LAP";
 
     // SharedPreferences keys
     public static final String SHARED_PREFERENCE_NAME = "co.magency.huzaima.timer-welcome";
@@ -52,8 +53,6 @@ public class AppUtility {
     public static io.realm.Sort TIMER_LIST_SORT_ORDER;
 
     public static Timer timer;
-
-    public static Realm realm;
 
     public static Context context;
 

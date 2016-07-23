@@ -28,7 +28,8 @@ import co.magency.huzaima.timer.Interface.OnNextButtonClickListener;
 import co.magency.huzaima.timer.R;
 import co.magency.huzaima.timer.Utilities.AppUtility;
 
-public class SetNotificationFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
+public class SetNotificationFragment extends Fragment implements RadioGroup.OnCheckedChangeListener,
+        View.OnClickListener {
 
     @BindView(R.id.wifi)
     public CheckBox wifi;
@@ -266,7 +267,9 @@ public class SetNotificationFragment extends Fragment implements RadioGroup.OnCh
 
         contactList.clear();
 
-        Cursor people = getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        Cursor people = getContext()
+                .getContentResolver()
+                .query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
         while (people.moveToNext()) {
             String contactName = people.getString(people.getColumnIndex(

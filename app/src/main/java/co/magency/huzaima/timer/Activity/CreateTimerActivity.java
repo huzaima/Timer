@@ -6,8 +6,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-import com.github.fabtransitionactivity.SheetLayout;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.magency.huzaima.timer.Fragment.SetNameFragment;
@@ -22,7 +20,7 @@ import co.magency.huzaima.timer.R;
 import co.magency.huzaima.timer.Utilities.AppUtility;
 import io.realm.Realm;
 
-public class CreateTimerActivity extends AppCompatActivity implements OnNextButtonClickListener, SheetLayout.OnFabAnimationEndListener {
+public class CreateTimerActivity extends AppCompatActivity implements OnNextButtonClickListener {
 
     @BindView(R.id.next)
     public FloatingActionButton next;
@@ -79,7 +77,6 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
             timer.setHour(bundle.getInt(AppUtility.HOUR));
             timer.setMinute(bundle.getInt(AppUtility.MINUTE));
             timer.setSecond(bundle.getInt(AppUtility.SECOND));
-            timer.setNoOfLapse(bundle.getInt(AppUtility.TIMER_LAPSE));
 
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.placeholder, setNotificationFragment, AppUtility.SET_NOTIFICATION_FRAGMENT);
@@ -98,8 +95,11 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
                 timer.setCall(call);
             }
 
-            if (bundle.containsKey(AppUtility.MESSAGE_TO) && bundle.containsKey(AppUtility.MESSAGE_TEXT)) {
-                Timer_Message message = new Timer_Message(bundle.getString(AppUtility.MESSAGE_TO), bundle.getString(AppUtility.MESSAGE_TEXT));
+            if (bundle.containsKey(AppUtility.MESSAGE_TO) &&
+                    bundle.containsKey(AppUtility.MESSAGE_TEXT)) {
+                Timer_Message message = new Timer_Message(
+                        bundle.getString(AppUtility.MESSAGE_TO),
+                        bundle.getString(AppUtility.MESSAGE_TEXT));
                 timer.setMessage(message);
             }
 
@@ -108,7 +108,7 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
             String alertFrequency = bundle.getString(AppUtility.NOTIFICATION_FREQUENCY);
             timer.setAlertFrequency(alertFrequency);
 
-            Realm realm = AppUtility.realm;
+            Realm realm = Realm.getDefaultInstance();
 
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
@@ -118,14 +118,11 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
                 }
             });
 
+            realm.close();
+
             Intent intent = new Intent(getApplicationContext(), ListTimerExpandedActivity.class);
             startActivity(intent);
             finish();
         }
-    }
-
-    @Override
-    public void onFabAnimationEnd() {
-        finish();
     }
 }

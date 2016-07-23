@@ -114,7 +114,9 @@ public class SetTimerFragment extends Fragment implements View.OnClickListener {
 
         switch (id) {
             case R.id.zero:
-                if (hour.getText().equals("00") && minute.getText().equals("00") && second.getText().equals("00")) {
+                if (hour.getText().equals("00") &&
+                        minute.getText().equals("00") &&
+                        second.getText().equals("00")) {
                     next.setEnabled(false);
                     break;
                 }
@@ -128,7 +130,10 @@ public class SetTimerFragment extends Fragment implements View.OnClickListener {
             case R.id.eight:
             case R.id.nine:
                 Button button = (Button) v;
-                String state[] = new String[]{hour.getText().toString(), minute.getText().toString(), second.getText().toString()};
+                String state[] = new String[]{
+                        hour.getText().toString(),
+                        minute.getText().toString(),
+                        second.getText().toString()};
                 String text = button.getText().toString();
                 if (currentDigitCount == 0) {
                     next.setEnabled(true);
@@ -186,16 +191,23 @@ public class SetTimerFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.next:
-                int targetHour = Integer.parseInt(hour.getText().toString());
-                int targetMinute = Integer.parseInt(minute.getText().toString());
-                int targetSeconds = Integer.parseInt(second.getText().toString());
 
-                Bundle bundle = new Bundle();
-                bundle.putInt(AppUtility.INPUT_SCREEN, AppUtility.TIME_INPUT_SCREEN);
-                bundle.putInt(AppUtility.HOUR, targetHour);
-                bundle.putInt(AppUtility.MINUTE, targetMinute);
-                bundle.putInt(AppUtility.SECOND, targetSeconds);
-                onNextButtonClickListener.onNextButtonClicked(bundle);
+                if (hour.getText().toString().equals("00") &&
+                        minute.getText().toString().equals("00") &&
+                        Integer.parseInt(second.getText().toString()) < 5) {
+                    AppUtility.showToast("Time cannot be less than 5 seconds");
+                } else {
+                    int targetHour = Integer.parseInt(hour.getText().toString());
+                    int targetMinute = Integer.parseInt(minute.getText().toString());
+                    int targetSeconds = Integer.parseInt(second.getText().toString());
+
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(AppUtility.INPUT_SCREEN, AppUtility.TIME_INPUT_SCREEN);
+                    bundle.putInt(AppUtility.HOUR, targetHour);
+                    bundle.putInt(AppUtility.MINUTE, targetMinute);
+                    bundle.putInt(AppUtility.SECOND, targetSeconds);
+                    onNextButtonClickListener.onNextButtonClicked(bundle);
+                }
                 break;
         }
     }

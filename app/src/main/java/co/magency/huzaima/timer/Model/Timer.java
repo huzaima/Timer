@@ -33,6 +33,10 @@ public class Timer extends RealmObject {
         message = null;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "49393415468",
+    "firebase_url": "https://timer-44822.firebaseio.com",
+    "project_id": "timer-44822",
+    "storage_bucket": "timer-44822.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:49393415468:android:49e9e76deb21a499",
+        "android_client_info": {
+          "package_name": "co.magency.huzaima.timer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "49393415468-43vmt62lfiu6nd925q2366is1p6auglm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGKW190E9tZfNcVMkEhj8ieqnNp9Cgt7U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

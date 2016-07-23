@@ -21,7 +21,7 @@ public class MyApplication extends Application {
                 .deleteRealmIfMigrationNeeded()
                 .build();
 
-        AppUtility.realm = Realm.getInstance(realmConfiguration);
+        Realm.setDefaultConfiguration(realmConfiguration);
 
         AppUtility.context = getApplicationContext();
     }

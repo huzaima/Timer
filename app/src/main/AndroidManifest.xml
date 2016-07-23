@@ -21,7 +21,22 @@
         </activity>
         <activity android:name=".Activity.CreateTimerActivity" />
         <activity android:name=".Activity.ListTimerActivity" />
-        <activity android:name=".Activity.ListTimerExpandedActivity"></activity>
+        <activity
+            android:name=".Activity.ListTimerExpandedActivity"
+            android:parentActivityName=".Activity.ListTimerActivity" />
+
+        <receiver
+            android:name=".BroadcastReceiver.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service
+            android:name=".Service.AlarmService"
+            android:exported="false" />
+
+        <activity
+            android:name=".Activity.AlarmRingingActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

@@ -25,6 +25,7 @@ import co.magency.huzaima.timer.Interface.OnItemClickListener;
 import co.magency.huzaima.timer.Model.Timer;
 import co.magency.huzaima.timer.R;
 import co.magency.huzaima.timer.Utilities.AppUtility;
+import io.realm.Realm;
 import io.realm.Sort;
 
 public class ListTimerActivity extends AppCompatActivity implements View.OnClickListener,
@@ -38,6 +39,7 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
     @BindView(R.id.sheet_wrapper)
     public SheetLayout sheetLayout;
     private TimerRecyclerViewAdapter timerRecyclerViewAdapter;
+    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,8 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_list_timer);
 
         ButterKnife.bind(this);
+
+        realm = Realm.getDefaultInstance();
 
         new SpotlightView.Builder(this)
                 .enableRevalAnimation(true)
@@ -60,7 +64,7 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getApplicationContext(),
-                AppUtility.realm.where(Timer.class).findAll());
+                realm.where(Timer.class).findAll());
         if (timerRecyclerViewAdapter.getData().size() > 0) {
             findViewById(R.id.no_timers_added).setVisibility(View.GONE);
         }
@@ -83,8 +87,9 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        realm.close();
+        super.onDestroy();
     }
 
     @Override
@@ -111,33 +116,24 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
                                         AppUtility.TIMER_LIST_SORT_ORDER = which == 0 ? Sort.ASCENDING : Sort.DESCENDING;
                                         AppUtility.TIMER_LIST_SORT_BY = AppUtility.TIMER_COLUMN_CREATED_AT;
                                         timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getApplicationContext(),
-                                                AppUtility.realm.where(Timer.class)
-                                                        .findAllSortedAsync(AppUtility.TIMER_LIST_SORT_BY,
-                                                                AppUtility.TIMER_LIST_SORT_ORDER));
-                                        timerRecyclerViewAdapter.setOnItemClickListener(ListTimerActivity.this);
-                                        recyclerView.setAdapter(timerRecyclerViewAdapter);
+                                                realm.where(Timer.class).findAllSorted(AppUtility.TIMER_LIST_SORT_BY,
+                                                        AppUtility.TIMER_LIST_SORT_ORDER));
                                         break;
                                     case 2:
                                     case 3:
                                         AppUtility.TIMER_LIST_SORT_ORDER = which == 2 ? Sort.ASCENDING : Sort.DESCENDING;
                                         AppUtility.TIMER_LIST_SORT_BY = AppUtility.TIMER_COLUMN_NAME;
                                         timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getApplicationContext(),
-                                                AppUtility.realm.where(Timer.class)
-                                                        .findAllSortedAsync(AppUtility.TIMER_LIST_SORT_BY,
-                                                                AppUtility.TIMER_LIST_SORT_ORDER));
-                                        timerRecyclerViewAdapter.setOnItemClickListener(ListTimerActivity.this);
-                                        recyclerView.setAdapter(timerRecyclerViewAdapter);
+                                                realm.where(Timer.class).findAllSorted(AppUtility.TIMER_LIST_SORT_BY,
+                                                        AppUtility.TIMER_LIST_SORT_ORDER));
                                         break;
                                     case 4:
                                     case 5:
                                         AppUtility.TIMER_LIST_SORT_ORDER = which == 4 ? Sort.ASCENDING : Sort.DESCENDING;
                                         AppUtility.TIMER_LIST_SORT_BY = AppUtility.TIMER_COLUMN_DURATION;
                                         timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getApplicationContext(),
-                                                AppUtility.realm.where(Timer.class)
-                                                        .findAllSortedAsync(AppUtility.TIMER_LIST_SORT_BY,
-                                                                AppUtility.TIMER_LIST_SORT_ORDER));
-                                        timerRecyclerViewAdapter.setOnItemClickListener(ListTimerActivity.this);
-                                        recyclerView.setAdapter(timerRecyclerViewAdapter);
+                                                realm.where(Timer.class).findAllSorted(AppUtility.TIMER_LIST_SORT_BY,
+                                                        AppUtility.TIMER_LIST_SORT_ORDER));
                                         break;
                                 }
                             }
