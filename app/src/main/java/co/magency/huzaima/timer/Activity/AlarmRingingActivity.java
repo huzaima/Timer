@@ -42,7 +42,6 @@ public class AlarmRingingActivity extends AppCompatActivity implements View.OnCl
         Uri alarmTone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         r = RingtoneManager.getRingtone(getApplicationContext(), alarmTone);
         r.setStreamType(AudioManager.STREAM_ALARM);
-        r.play();
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -52,6 +51,8 @@ public class AlarmRingingActivity extends AppCompatActivity implements View.OnCl
                     ringing.setVisibility(View.INVISIBLE);
                 else
                     ringing.setVisibility(View.VISIBLE);
+
+                handler.postDelayed(this, 500);
             }
         }, 500);
     }
@@ -59,6 +60,7 @@ public class AlarmRingingActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         r.stop();
+        handler.removeCallbacksAndMessages(null);
         finish();
     }
 }

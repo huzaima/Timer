@@ -47,7 +47,7 @@ public class AlarmService extends IntentService {
             pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
                     3523341,
                     tempIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent.FLAG_CANCEL_CURRENT);
 
         } else {
             tempIntent = new Intent(getApplicationContext(), AlarmRingingActivity.class);
@@ -56,7 +56,7 @@ public class AlarmService extends IntentService {
             pendingIntent = PendingIntent.getActivity(getApplicationContext(),
                     3523341,
                     tempIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent.FLAG_CANCEL_CURRENT);
         }
 
         alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
