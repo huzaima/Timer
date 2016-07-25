@@ -29,4 +29,6 @@
     <!--string for transition-->
     <string name="timer_name_card">timer_name_card</string>
 
+    <string name="current_lapse">Lapse: %d</string>
+
 </resources>

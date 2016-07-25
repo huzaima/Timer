@@ -36,6 +36,7 @@
 
         <activity
             android:name=".Activity.AlarmRingingActivity"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme" />
     </application>
 

@@ -1,5 +1,6 @@
 package co.magency.huzaima.timer.Activity;
 
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -22,10 +23,13 @@ public class AlarmRingingActivity extends AppCompatActivity implements View.OnCl
     public TextView ringing;
     @BindView(R.id.name)
     public TextView name;
+    @BindView(R.id.current_lapse)
+    public TextView currentLap;
     @BindView(R.id.stop)
     public Button stop;
     private Handler handler;
     private Ringtone r;
+    private int lap = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class AlarmRingingActivity extends AppCompatActivity implements View.OnCl
         handler = new Handler();
 
         name.setText(getIntent().getStringExtra(AppUtility.TIMER_NAME));
+        currentLap.setText(getString(R.string.current_lapse, lap));
 
         stop.setOnClickListener(this);
 
@@ -52,15 +57,33 @@ public class AlarmRingingActivity extends AppCompatActivity implements View.OnCl
                 else
                     ringing.setVisibility(View.VISIBLE);
 
+                if (r != null && !r.isPlaying())
+                    r.play();
+
                 handler.postDelayed(this, 500);
             }
         }, 500);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                r.stop();
+                r = null;
+            }
+        }, 60 * 1000);
     }
 
     @Override
     public void onClick(View v) {
-        r.stop();
+        if (r != null)
+            r.stop();
         handler.removeCallbacksAndMessages(null);
         finish();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        currentLap.setText(getString(R.string.current_lapse, ++lap));
     }
 }

@@ -38,6 +38,7 @@ public class AppUtility {
     public static final String MESSAGE_TEXT = "MESSAGE";
     public static final String ALARM_TIME = "ALARM_TIME";
     public static String CURRENT_LAP = "CURRENT_LAP";
+    public static boolean IS_ONE_LAPSE;
 
     // SharedPreferences keys
     public static final String SHARED_PREFERENCE_NAME = "co.magency.huzaima.timer-welcome";

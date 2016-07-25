@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import java.util.ArrayList;
@@ -85,6 +86,11 @@ public class SetNotificationFragment extends Fragment implements RadioGroup.OnCh
     public void onResume() {
         super.onResume();
         attachListeners();
+
+        if (AppUtility.IS_ONE_LAPSE) {
+            getView().findViewById(R.id.notify_every_lapse).setEnabled(false);
+            ((RadioButton) getView().findViewById(R.id.notify_after_complete)).setChecked(true);
+        }
     }
 
     @Override

@@ -278,8 +278,6 @@ public class ListTimerExpandedActivity extends AppCompatActivity implements Real
     @Override
     public void onClick(View v) {
 
-        // TODO: Add condition for when lapse is 0 and notify after every lapse
-
         playTimer.setEnabled(false);
         playTimer.setAlpha(0.5f);
 
@@ -291,6 +289,8 @@ public class ListTimerExpandedActivity extends AppCompatActivity implements Real
             Intent intent = new Intent(getApplicationContext(), AlarmService.class);
             intent.putExtra(AppUtility.TIMER_NAME, timer.getName());
             startService(intent);
+            AppUtility.showToast("Timer started");
+            finish();
         } else if (timer.getAlertFrequency().equals(AppUtility.AFTER_COMPLETE_TIMER)) {
             final AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 
@@ -322,6 +322,8 @@ public class ListTimerExpandedActivity extends AppCompatActivity implements Real
             alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     time,
                     pendingIntent);
+            AppUtility.showToast("Timer started");
+            finish();
         }
     }
 

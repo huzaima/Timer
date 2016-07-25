@@ -98,8 +98,14 @@ public class SetNameFragment extends Fragment implements View.OnClickListener {
             bundle.putInt(AppUtility.INPUT_SCREEN, AppUtility.NAME_INPUT_SCREEN);
             bundle.putString(AppUtility.TIMER_NAME, tempName);
             bundle.putInt(AppUtility.TIMER_LAPSE, noOfLapse);
+            if (noOfLapse == 0)
+                AppUtility.IS_ONE_LAPSE = true;
+            else
+                AppUtility.IS_ONE_LAPSE = false;
             onNextButtonClickListener.onNextButtonClicked(bundle);
-        } else {
+        } else
+
+        {
             name.setError("Name cannot be empty");
         }
     }
