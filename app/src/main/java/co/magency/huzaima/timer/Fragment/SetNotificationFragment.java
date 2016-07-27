@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,17 @@ public class SetNotificationFragment extends Fragment implements RadioGroup.OnCh
         bundle.putInt(AppUtility.INPUT_SCREEN, AppUtility.NOTIFICATION_INPUT_SCREEN);
         bundle.putString(AppUtility.NOTIFICATION_TYPE, AppUtility.ALARM);
         bundle.putString(AppUtility.NOTIFICATION_FREQUENCY, AppUtility.AFTER_EVERY_LAPSE);
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                populateContacts();
+                for (int c = 0; c < contactList.size(); c++) {
+                    Log.v("ABCD", contactList.get(c).toString());
+                }
+            }
+        }).start();
 
     }
 
@@ -269,7 +281,7 @@ public class SetNotificationFragment extends Fragment implements RadioGroup.OnCh
         }
     }
 
-    public void PopulatePeopleList() {
+    public void populateContacts() {
 
         contactList.clear();
 
