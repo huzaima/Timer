@@ -23,9 +23,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         android.support.v4.app.NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setContentTitle("Timer")
-                .setContentText("Lapse completed for timer \"" +
-                        intent.getStringExtra(AppUtility.TIMER_NAME) + "\"")
+                .setContentTitle("Timer: " + intent.getStringExtra(AppUtility.TIMER_NAME))
+                .setContentText("Lapse " + intent.getIntExtra(AppUtility.TIMER_LAPSE, 0) + " completed")
                 .setSmallIcon(R.drawable.timerclock2)
                 .setSound(uri);
 

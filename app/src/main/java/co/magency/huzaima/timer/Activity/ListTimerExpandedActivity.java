@@ -281,21 +281,23 @@ public class ListTimerExpandedActivity extends AppCompatActivity implements Real
         playTimer.setEnabled(false);
         playTimer.setAlpha(0.5f);
 
+        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        Intent tempIntent;
+        PendingIntent pendingIntent;
+
         if (timer.getAlertType().equals(AppUtility.DONT_NOTIFY)) {
             AppUtility.showToast("Cannot start timer when \"Don't Notify\" is set");
         } else if (!timer.getAlertType().equals(AppUtility.DONT_NOTIFY) &&
                 timer.getNoOfLapse() > 0 &&
                 timer.getAlertFrequency().equals(AppUtility.AFTER_EVERY_LAPSE)) {
-            Intent intent = new Intent(getApplicationContext(), AlarmService.class);
-            intent.putExtra(AppUtility.TIMER_NAME, timer.getName());
-            startService(intent);
-            AppUtility.showToast("Timer started");
-            finish();
-        } else if (timer.getAlertFrequency().equals(AppUtility.AFTER_COMPLETE_TIMER)) {
-            final AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 
-            Intent tempIntent;
-            PendingIntent pendingIntent;
+            tempIntent = new Intent(getApplicationContext(), AlarmService.class);
+            tempIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            tempIntent.putExtra(AppUtility.TIMER_NAME, timer.getName());
+            startService(tempIntent);
+            AppUtility.showToast("Timer started");
+            supportFinishAfterTransition();
+        } else if (timer.getAlertFrequency().equals(AppUtility.AFTER_COMPLETE_TIMER)) {
 
             if (timer.getAlertType().equals(AppUtility.NOTIFICATION_ONLY)) {
                 tempIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
@@ -313,6 +315,7 @@ public class ListTimerExpandedActivity extends AppCompatActivity implements Real
                         PendingIntent.FLAG_UPDATE_CURRENT);
             }
             tempIntent.putExtra(AppUtility.TIMER_NAME, timer.getName());
+            tempIntent.putExtra(AppUtility.TIMER_LAPSE, 1);
             int time;
             if (timer.getNoOfLapse() > 0)
                 time = (int) SystemClock.elapsedRealtime() + timer.getNoOfLapse() * timer.getDuration() * 1000;
@@ -323,7 +326,7 @@ public class ListTimerExpandedActivity extends AppCompatActivity implements Real
                     time,
                     pendingIntent);
             AppUtility.showToast("Timer started");
-            finish();
+            supportFinishAfterTransition();
         }
     }
 

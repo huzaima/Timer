@@ -1,12 +1,16 @@
 package co.magency.huzaima.timer.Service;
 
-import android.app.AlarmManager;
-import android.app.IntentService;
-import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import android.os.SystemClock;
+import android.os.HandlerThread;
+import android.os.IBinder;
+import android.os.PowerManager;
+import android.support.annotation.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import co.magency.huzaima.timer.Activity.AlarmRingingActivity;
 import co.magency.huzaima.timer.BroadcastReceiver.AlarmReceiver;
@@ -14,63 +18,116 @@ import co.magency.huzaima.timer.Model.Timer;
 import co.magency.huzaima.timer.Utilities.AppUtility;
 import io.realm.Realm;
 
-public class AlarmService extends IntentService {
+public class AlarmService extends Service {
 
-    public AlarmService() {
-        super("AlarmService");
-    }
-
-    final Handler handler = new Handler();
-    AlarmManager alarmManager;
-    PendingIntent pendingIntent;
-    Intent tempIntent;
+    private HandlerThread handlerThread;
+    private Handler handler;
+    private Map<String, Integer> currentLap = new HashMap<>();
+    private Map<String, Timer> timer = new HashMap<>();
+    private PowerManager.WakeLock wakeLock;
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public void onCreate() {
+        super.onCreate();
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        Timer timer = realm.where(Timer.class)
-                .equalTo(AppUtility.TIMER_COLUMN_NAME, intent.getStringExtra(AppUtility.TIMER_NAME))
-                .findFirst();
-        realm.commitTransaction();
+        wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
+                .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "wakeLock");
 
-        alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        wakeLock.acquire();
 
-        if (timer.getAlertType().equals(AppUtility.NOTIFICATION_ONLY)) {
-
-            tempIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
-            tempIntent.putExtra(AppUtility.ALARM_TIME, timer.getDuration());
-            tempIntent.putExtra(AppUtility.TIMER_LAPSE, timer.getNoOfLapse());
-            tempIntent.putExtra(AppUtility.TIMER_NAME, timer.getName());
-
-            pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-                    3523341,
-                    tempIntent,
-                    PendingIntent.FLAG_CANCEL_CURRENT);
-
-        } else {
-            tempIntent = new Intent(getApplicationContext(), AlarmRingingActivity.class);
-            tempIntent.putExtra(AppUtility.TIMER_NAME, timer.getName());
-
-            pendingIntent = PendingIntent.getActivity(getApplicationContext(),
-                    3523341,
-                    tempIntent,
-                    PendingIntent.FLAG_CANCEL_CURRENT);
-        }
-
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + timer.getDuration() * 1000,
-                timer.getDuration() * 1000,
-                pendingIntent);
+        handlerThread = new HandlerThread("alarmservice" + System.currentTimeMillis(), Thread.MAX_PRIORITY);
+        handlerThread.start();
+        handler = new Handler(handlerThread.getLooper());
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                alarmManager.cancel(pendingIntent);
-                stopSelf();
+                if (timer.isEmpty() && currentLap.isEmpty()) {
+                    stopSelf();
+                }
             }
-        }, timer.getNoOfLapse() * timer.getDuration() * 1000);
+        }, 60 * 1000);
+    }
 
+    @Override
+    public int onStartCommand(final Intent i, int flags, int startId) {
+
+        handler.postAtFrontOfQueue(new Runnable() {
+            @Override
+            public void run() {
+
+                if (i != null) {
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.beginTransaction();
+                    final Timer t = realm.where(Timer.class)
+                            .equalTo(AppUtility.TIMER_COLUMN_NAME, i.getStringExtra(AppUtility.TIMER_NAME))
+                            .findFirst();
+                    realm.commitTransaction();
+                    currentLap.put(i.getStringExtra(AppUtility.TIMER_NAME), 0);
+                    timer.put(t.getName(), t);
+                    startTimer(i.getStringExtra(AppUtility.TIMER_NAME));
+                }
+            }
+        });
+        return START_STICKY;
+    }
+
+    private void startTimer(final String name) {
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                final Intent tempIntent;
+
+                final boolean broadcast;
+                if (timer.get(name).getAlertType().equals(AppUtility.NOTIFICATION_ONLY)) {
+                    tempIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
+                    broadcast = true;
+                } else {
+                    tempIntent = new Intent(getApplicationContext(), AlarmRingingActivity.class);
+                    broadcast = false;
+                }
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (currentLap.get(name) < timer.get(name).getNoOfLapse()) {
+                            tempIntent.putExtra(AppUtility.TIMER_NAME, name);
+                            currentLap.put(name, currentLap.get(name) + 1);
+                            tempIntent.putExtra(AppUtility.TIMER_LAPSE, currentLap.get(name));
+                            tempIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            if (!broadcast)
+                                startActivity(tempIntent);
+                            else
+                                sendBroadcast(tempIntent);
+                            handler.postDelayed(this, timer.get(name).getDuration() * 1000);
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    timer.remove(name);
+                                    currentLap.remove(name);
+                                }
+                            });
+                        }
+                    }
+                }, timer.get(name).getDuration() * 1000);
+            }
+        });
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
+        handlerThread.quit();
+        wakeLock.release();
+        super.onDestroy();
     }
 }

@@ -1,18 +1,24 @@
 package co.magency.huzaima.timer.Adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.magency.huzaima.timer.Activity.ListTimerActivity;
 import co.magency.huzaima.timer.Interface.OnItemClickListener;
 import co.magency.huzaima.timer.Model.Timer;
 import co.magency.huzaima.timer.R;
 import co.magency.huzaima.timer.Utilities.AppUtility;
 import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 
 /**
@@ -54,6 +60,10 @@ public class TimerRecyclerViewAdapter extends RealmRecyclerViewAdapter<Timer,
         else
             holder.timerNotification.setText(context.getString(R.string.notify_text, timer.getAlertType(), timer.getAlertFrequency()));
 
+        PopupMenu popupMenu = new PopupMenu(context, holder.itemView.findViewById(R.id.list_item_card));
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.menu, popupMenu.getMenu());
+
         holder.attachListener(timer, listener);
     }
 
@@ -78,6 +88,34 @@ public class TimerRecyclerViewAdapter extends RealmRecyclerViewAdapter<Timer,
                 @Override
                 public void onClick(View v) {
                     listener1.onItemClick(timer);
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    new AlertDialog.Builder(ListTimerActivity.instance)
+                            .setTitle("Delete")
+                            .setMessage("Are you sure want to delete this timer?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Realm realm = Realm.getDefaultInstance();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            realm.where(Timer.class)
+                                                    .equalTo(AppUtility.TIMER_COLUMN_NAME, timer.getName())
+                                                    .findFirst()
+                                                    .deleteFromRealm();
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .setCancelable(true)
+                            .create()
+                            .show();
+                    return true;
                 }
             });
         }

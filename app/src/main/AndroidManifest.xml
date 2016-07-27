@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="co.magency.huzaima.timer">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:name=".Application.MyApplication"
         android:allowBackup="true"
@@ -25,10 +27,7 @@
             android:name=".Activity.ListTimerExpandedActivity"
             android:parentActivityName=".Activity.ListTimerActivity" />
 
-        <receiver
-            android:name=".BroadcastReceiver.AlarmReceiver"
-            android:enabled="true"
-            android:exported="false" />
+        <receiver android:name=".BroadcastReceiver.AlarmReceiver" />
 
         <service
             android:name=".Service.AlarmService"
@@ -36,7 +35,7 @@
 
         <activity
             android:name=".Activity.AlarmRingingActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme" />
     </application>
 

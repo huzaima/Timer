@@ -1,5 +1,6 @@
 package co.magency.huzaima.timer.Activity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -40,11 +41,14 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
     public SheetLayout sheetLayout;
     private TimerRecyclerViewAdapter timerRecyclerViewAdapter;
     private Realm realm;
+    public static Activity instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_timer);
+
+        instance = this;
 
         ButterKnife.bind(this);
 
@@ -75,6 +79,7 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onResume() {
         super.onResume();
+        instance = this;
         attachListeners();
         if (sheetLayout != null && sheetLayout.isFabExpanded())
             sheetLayout.contractFab();
@@ -84,6 +89,12 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
         } else {
             findViewById(R.id.no_timers_added).setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        instance = null;
     }
 
     @Override

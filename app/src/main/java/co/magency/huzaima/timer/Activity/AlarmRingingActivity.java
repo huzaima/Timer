@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -29,18 +30,18 @@ public class AlarmRingingActivity extends AppCompatActivity implements View.OnCl
     public Button stop;
     private Handler handler;
     private Ringtone r;
-    private int lap = 1;
+    private boolean check = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_ringing);
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         ButterKnife.bind(this);
         handler = new Handler();
 
         name.setText(getIntent().getStringExtra(AppUtility.TIMER_NAME));
-        currentLap.setText(getString(R.string.current_lapse, lap));
+        currentLap.setText(getString(R.string.current_lapse, getIntent().getIntExtra(AppUtility.TIMER_LAPSE, 0)));
 
         stop.setOnClickListener(this);
 
@@ -52,17 +53,24 @@ public class AlarmRingingActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void run() {
 
-                if (ringing.getVisibility() == View.VISIBLE)
-                    ringing.setVisibility(View.INVISIBLE);
-                else
-                    ringing.setVisibility(View.VISIBLE);
+                if (check) {
+                    if (ringing.getAlpha() > 0)
+                        ringing.setAlpha(ringing.getAlpha() - 0.1f);
+                    else
+                        check = !check;
+                } else {
+                    if (ringing.getAlpha() < 1)
+                        ringing.setAlpha(ringing.getAlpha() + 0.1f);
+                    else
+                        check = !check;
+                }
 
                 if (r != null && !r.isPlaying())
                     r.play();
 
-                handler.postDelayed(this, 500);
+                handler.postDelayed(this, 50);
             }
-        }, 500);
+        }, 50);
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -84,6 +92,10 @@ public class AlarmRingingActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        currentLap.setText(getString(R.string.current_lapse, ++lap));
+        setIntent(intent);
+        if (getIntent() != null) {
+            name.setText(getIntent().getStringExtra(AppUtility.TIMER_NAME));
+            currentLap.setText(getString(R.string.current_lapse, getIntent().getIntExtra(AppUtility.TIMER_LAPSE, 0)));
+        }
     }
 }
