@@ -66,7 +66,7 @@ public class ListTimerExpandedActivity extends AppCompatActivity implements Real
     @BindView(R.id.message)
     public CardView message;
     @BindView(R.id.play_timer)
-    FloatingActionButton playTimer;
+    public FloatingActionButton playTimer;
     private Timer timer;
     private Realm realm;
 
@@ -124,46 +124,59 @@ public class ListTimerExpandedActivity extends AppCompatActivity implements Real
             callToolbar.setTitleTextColor(Color.WHITE);
             callToolbar.inflateMenu(R.menu.card_menu);
             callToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    final View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_call, null);
-                    final EditText editText = (EditText) view.findViewById(R.id.number);
-                    editText.setText(timer.getCall().getNumber());
-                    editText.setTextColor(Color.BLACK);
-                    final AlertDialog dialog = new AlertDialog.Builder(ListTimerExpandedActivity.this)
-                            .setView(view)
-                            .setTitle("Call")
-                            .setPositiveButton("Done", null)
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                @Override
-                                public void onCancel(DialogInterface dialog) {
-                                    dialog.dismiss();
-                                }
-                            }).create();
-                    dialog.show();
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (editText.getText().toString().isEmpty()) {
-                                editText.setError("Number cannot be empty");
-                            } else {
-                                String number = editText.getText().toString();
-                                realm.beginTransaction();
-                                timer.getCall().setNumber(number);
-                                realm.commitTransaction();
-                                dialog.dismiss();
-                            }
-                        }
-                    });
-                    return true;
-                }
-            });
+                                                       @Override
+                                                       public boolean onMenuItemClick(MenuItem item) {
+
+                                                           switch (item.getItemId()) {
+                                                               case R.id.edit:
+                                                                   final View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_call, null);
+                                                                   final EditText editText = (EditText) view.findViewById(R.id.number);
+                                                                   editText.setText(timer.getCall().getNumber());
+                                                                   editText.setTextColor(Color.BLACK);
+                                                                   final AlertDialog dialog = new AlertDialog.Builder(ListTimerExpandedActivity.this)
+                                                                           .setView(view)
+                                                                           .setTitle("Call")
+                                                                           .setPositiveButton("Done", null)
+                                                                           .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                                               @Override
+                                                                               public void onClick(DialogInterface dialog, int which) {
+                                                                                   dialog.dismiss();
+                                                                               }
+                                                                           })
+                                                                           .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                                                               @Override
+                                                                               public void onCancel(DialogInterface dialog) {
+                                                                                   dialog.dismiss();
+                                                                               }
+                                                                           }).create();
+                                                                   dialog.show();
+                                                                   dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                                                                       @Override
+                                                                       public void onClick(View v) {
+                                                                           if (editText.getText().toString().isEmpty()) {
+                                                                               editText.setError("Number cannot be empty");
+                                                                           } else {
+                                                                               String number = editText.getText().toString();
+                                                                               realm.beginTransaction();
+                                                                               timer.getCall().setNumber(number);
+                                                                               realm.commitTransaction();
+                                                                               dialog.dismiss();
+                                                                           }
+                                                                       }
+                                                                   });
+                                                                   return true;
+                                                               case R.id.delete:
+                                                                   realm.beginTransaction();
+                                                                   timer.setCall(null);
+                                                                   realm.commitTransaction();
+                                                                   call.setVisibility(View.GONE);
+                                                                   return true;
+                                                           }
+                                                           return true;
+                                                       }
+                                                   }
+
+            );
         }
 
         if (timer.getMessage() == null) {
@@ -182,54 +195,66 @@ public class ListTimerExpandedActivity extends AppCompatActivity implements Real
             messageToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    final View view2 = LayoutInflater
-                            .from(getApplicationContext())
-                            .inflate(R.layout.dialog_message, null);
-                    final EditText editText = (EditText) view2.findViewById(R.id.number);
-                    final EditText message = (EditText) view2.findViewById(R.id.message);
-                    editText.setText(timer.getMessage().getTo());
-                    editText.setTextColor(Color.BLACK);
-                    message.setText(timer.getMessage().getMessage());
-                    message.setTextColor(Color.BLACK);
-                    final AlertDialog dialog1 = new AlertDialog.Builder(ListTimerExpandedActivity.this)
-                            .setView(view2)
-                            .setTitle("Message")
-                            .setPositiveButton("Done", null)
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
+
+                    switch (item.getItemId()) {
+                        case R.id.edit:
+                            final View view2 = LayoutInflater
+                                    .from(getApplicationContext())
+                                    .inflate(R.layout.dialog_message, null);
+                            final EditText editText = (EditText) view2.findViewById(R.id.number);
+                            final EditText messageInput = (EditText) view2.findViewById(R.id.message);
+                            editText.setText(timer.getMessage().getTo());
+                            editText.setTextColor(Color.BLACK);
+                            messageInput.setText(timer.getMessage().getMessage());
+                            messageInput.setTextColor(Color.BLACK);
+                            final AlertDialog dialog1 = new AlertDialog.Builder(ListTimerExpandedActivity.this)
+                                    .setView(view2)
+                                    .setTitle("Message")
+                                    .setPositiveButton("Done", null)
+                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                }
+                                            }
+                                    ).setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                                              @Override
+                                                              public void onCancel(DialogInterface dialog) {
+                                                                  dialog.dismiss();
+                                                              }
+                                                          }
+                                    ).create();
+                            dialog1.show();
+                            dialog1.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (editText.getText().toString().trim().isEmpty()) {
+                                        editText.setError("Number cannot be empty");
+                                    } else if (messageInput.getText().toString().trim().isEmpty()) {
+                                        messageInput.setError("Message cannot be empty");
+                                    } else {
+                                        String number = editText.getText().toString();
+                                        String messageText = messageInput.getText().toString();
+                                        realm.beginTransaction();
+                                        timer.getMessage().setTo(number);
+                                        timer.getMessage().setMessage(messageText);
+                                        realm.commitTransaction();
+                                        dialog1.dismiss();
                                     }
-                            ).setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                                      @Override
-                                                      public void onCancel(DialogInterface dialog) {
-                                                          dialog.dismiss();
-                                                      }
-                                                  }
-                            ).create();
-                    dialog1.show();
-                    dialog1.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (editText.getText().toString().trim().isEmpty()) {
-                                editText.setError("Number cannot be empty");
-                            } else if (message.getText().toString().trim().isEmpty()) {
-                                message.setError("Message cannot be empty");
-                            } else {
-                                String number = editText.getText().toString();
-                                String messageText = message.getText().toString();
-                                realm.beginTransaction();
-                                timer.getMessage().setTo(number);
-                                timer.getMessage().setMessage(messageText);
-                                realm.commitTransaction();
-                                dialog1.dismiss();
-                            }
-                        }
-                    });
+                                }
+                            });
+                            return true;
+                        case R.id.delete:
+                            realm.beginTransaction();
+                            timer.setMessage(null);
+                            realm.commitTransaction();
+                            message.setVisibility(View.GONE);
+                            return true;
+                    }
                     return true;
                 }
-            });
+                                                      }
+            );
         }
 
         if (timer.getWifiState() == null) {
@@ -248,29 +273,38 @@ public class ListTimerExpandedActivity extends AppCompatActivity implements Real
             wifiToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                                                        @Override
                                                        public boolean onMenuItemClick(MenuItem item) {
-                                                           View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_wifi_edit, null);
-                                                           final AlertDialog builder = new AlertDialog.Builder(ListTimerExpandedActivity.this)
-                                                                   .setTitle("WiFi")
-                                                                   .setView(v)
-                                                                   .setCancelable(true)
-                                                                   .create();
-                                                           ((Switch) v.findViewById(R.id.wifi_switch)).setChecked(timer.getWifiState().isWifiEnabled());
-                                                           v.findViewById(R.id.wifi_switch).setOnClickListener(new View.OnClickListener() {
-                                                               @Override
-                                                               public void onClick(final View v) {
+                                                           switch (item.getItemId()) {
+                                                               case R.id.edit:
+                                                                   View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_wifi_edit, null);
+                                                                   final AlertDialog builder = new AlertDialog.Builder(ListTimerExpandedActivity.this)
+                                                                           .setTitle("WiFi")
+                                                                           .setView(v)
+                                                                           .setCancelable(true)
+                                                                           .create();
+                                                                   ((Switch) v.findViewById(R.id.wifi_switch)).setChecked(timer.getWifiState().isWifiEnabled());
+                                                                   v.findViewById(R.id.wifi_switch).setOnClickListener(new View.OnClickListener() {
+                                                                       @Override
+                                                                       public void onClick(final View v) {
+                                                                           realm.beginTransaction();
+                                                                           Timer temp = realm.where(Timer.class)
+                                                                                   .equalTo(AppUtility.TIMER_COLUMN_NAME, timer.getName())
+                                                                                   .findFirst();
+                                                                           temp.getWifiState().setWifiEnabled(((Switch) v).isChecked());
+                                                                           realm.commitTransaction();
+                                                                       }
+                                                                   });
+                                                                   builder.show();
+                                                                   return true;
+                                                               case R.id.delete:
                                                                    realm.beginTransaction();
-                                                                   Timer temp = realm.where(Timer.class)
-                                                                           .equalTo(AppUtility.TIMER_COLUMN_NAME, timer.getName())
-                                                                           .findFirst();
-                                                                   temp.getWifiState().setWifiEnabled(((Switch) v).isChecked());
+                                                                   timer.setWifiState(null);
                                                                    realm.commitTransaction();
-                                                               }
-                                                           });
-                                                           builder.show();
+                                                                   wifi.setVisibility(View.GONE);
+                                                                   return true;
+                                                           }
                                                            return true;
                                                        }
                                                    }
-
             );
         }
     }
@@ -299,23 +333,26 @@ public class ListTimerExpandedActivity extends AppCompatActivity implements Real
             supportFinishAfterTransition();
         } else if (timer.getAlertFrequency().equals(AppUtility.AFTER_COMPLETE_TIMER)) {
 
+            tempIntent = new Intent();
+            tempIntent.putExtra(AppUtility.TIMER_NAME, timer.getName());
+            tempIntent.putExtra(AppUtility.TIMER_LAPSE, 1);
+
             if (timer.getAlertType().equals(AppUtility.NOTIFICATION_ONLY)) {
-                tempIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
+                tempIntent.setClass(getApplicationContext(), AlarmReceiver.class);
 
                 pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
                         3523341,
                         tempIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
             } else {
-                tempIntent = new Intent(getApplicationContext(), AlarmRingingActivity.class);
+                tempIntent.setClass(getApplicationContext(), AlarmRingingActivity.class);
 
                 pendingIntent = PendingIntent.getActivity(getApplicationContext(),
                         3523341,
                         tempIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
             }
-            tempIntent.putExtra(AppUtility.TIMER_NAME, timer.getName());
-            tempIntent.putExtra(AppUtility.TIMER_LAPSE, 1);
+
             int time;
             if (timer.getNoOfLapse() > 0)
                 time = (int) SystemClock.elapsedRealtime() + timer.getNoOfLapse() * timer.getDuration() * 1000;

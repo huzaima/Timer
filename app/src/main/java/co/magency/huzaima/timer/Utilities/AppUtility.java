@@ -43,6 +43,7 @@ public class AppUtility {
     // SharedPreferences keys
     public static final String SHARED_PREFERENCE_NAME = "co.magency.huzaima.timer-welcome";
     public static final String IS_LAUNCED_FIRST_TIME = "co.magency.huzaima.timer-first_time";
+    public static final String IS_SHOWCASE_VIEW_SHOWN = "co.magency.huzaima.timer-show_case_view_first_time";
 
     // Realm database column name for class Timer
     public static final String TIMER_COLUMN_NAME = "name";

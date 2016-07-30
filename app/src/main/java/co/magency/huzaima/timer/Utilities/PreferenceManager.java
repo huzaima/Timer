@@ -25,6 +25,15 @@ public class PreferenceManager {
     }
 
     public boolean isLaunchedFirstTime() {
-        return sharedPreferences.getBoolean(AppUtility.IS_LAUNCED_FIRST_TIME, true);
+        return sharedPreferences.getBoolean(AppUtility.IS_LAUNCED_FIRST_TIME, false);
+    }
+
+    public void setIsShowcaseViewShown(boolean isShowcaseViewShown) {
+        editor.putBoolean(AppUtility.IS_SHOWCASE_VIEW_SHOWN, isShowcaseViewShown);
+        editor.commit();
+    }
+
+    public boolean isShowcaseViewShown() {
+        return sharedPreferences.getBoolean(AppUtility.IS_SHOWCASE_VIEW_SHOWN, false);
     }
 }

@@ -17,8 +17,9 @@ import co.magency.huzaima.timer.BroadcastReceiver.AlarmReceiver;
 import co.magency.huzaima.timer.Model.Timer;
 import co.magency.huzaima.timer.Utilities.AppUtility;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 
-public class AlarmService extends Service {
+public class AlarmService extends Service implements RealmChangeListener<Timer> {
 
     private HandlerThread handlerThread;
     private Handler handler;
@@ -62,6 +63,7 @@ public class AlarmService extends Service {
                     final Timer t = realm.where(Timer.class)
                             .equalTo(AppUtility.TIMER_COLUMN_NAME, i.getStringExtra(AppUtility.TIMER_NAME))
                             .findFirst();
+                    t.addChangeListener(AlarmService.this);
                     realm.commitTransaction();
                     currentLap.put(i.getStringExtra(AppUtility.TIMER_NAME), 0);
                     timer.put(t.getName(), t);
@@ -92,29 +94,41 @@ public class AlarmService extends Service {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (currentLap.get(name) < timer.get(name).getNoOfLapse()) {
-                            tempIntent.putExtra(AppUtility.TIMER_NAME, name);
-                            currentLap.put(name, currentLap.get(name) + 1);
-                            tempIntent.putExtra(AppUtility.TIMER_LAPSE, currentLap.get(name));
-                            tempIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            if (!broadcast)
-                                startActivity(tempIntent);
-                            else
-                                sendBroadcast(tempIntent);
-                            handler.postDelayed(this, timer.get(name).getDuration() * 1000);
-                        } else {
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    timer.remove(name);
-                                    currentLap.remove(name);
-                                }
-                            });
+                        if (currentLap.get(name) != null && timer.get(name) != null && timer.get(name).isValid()) {
+                            if (currentLap.get(name) < timer.get(name).getNoOfLapse()) {
+                                tempIntent.putExtra(AppUtility.TIMER_NAME, name);
+                                currentLap.put(name, currentLap.get(name) + 1);
+                                tempIntent.putExtra(AppUtility.TIMER_LAPSE, currentLap.get(name));
+                                tempIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                if (!broadcast)
+                                    startActivity(tempIntent);
+                                else
+                                    sendBroadcast(tempIntent);
+                                handler.postDelayed(this, timer.get(name).getDuration() * 1000);
+                            } else {
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        timer.remove(name);
+                                        currentLap.remove(name);
+                                    }
+                                });
+                            }
                         }
                     }
                 }, timer.get(name).getDuration() * 1000);
             }
         });
+    }
+
+    @Override
+    public void onChange(Timer element) {
+        AppUtility.showToast("onCHanged called in AlarmService");
+        if (!element.isValid()) {
+            timer.remove(element.getName());
+            currentLap.remove(element.getName());
+            AppUtility.showToast("element not valid");
+        }
     }
 
     @Nullable

@@ -28,7 +28,7 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
     private SetNameFragment setNameFragment;
     private SetTimerFragment setTimerFragment;
     private SetNotificationFragment setNotificationFragment;
-
+    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,8 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
         setContentView(R.layout.activity_create_timer);
 
         ButterKnife.bind(this);
+
+        realm = Realm.getDefaultInstance();
 
         setNameFragment = new SetNameFragment();
         setTimerFragment = new SetTimerFragment();
@@ -66,18 +68,31 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
 
         final int SCREEN = bundle.getInt(AppUtility.INPUT_SCREEN);
         if (SCREEN == AppUtility.NAME_INPUT_SCREEN) {
-            timer = new Timer();
-            timer.setName(bundle.getString(AppUtility.TIMER_NAME));
+
+            realm.beginTransaction();
+            timer = realm.where(Timer.class)
+                    .equalTo(AppUtility.TIMER_COLUMN_NAME, bundle.getString(AppUtility.TIMER_NAME))
+                    .findFirst();
+
+            if (timer == null) {
+                timer = new Timer();
+                timer.setName(bundle.getString(AppUtility.TIMER_NAME));
+            } else {
+                AppUtility.showToast("Timer with this name already exists, it will be updated");
+            }
+
             timer.setNoOfLapse(bundle.getInt(AppUtility.TIMER_LAPSE));
+            realm.commitTransaction();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.placeholder, setTimerFragment, AppUtility.SET_TIMER_FRAGMENT);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
         } else if (SCREEN == AppUtility.TIME_INPUT_SCREEN) {
+            realm.beginTransaction();
             timer.setHour(bundle.getInt(AppUtility.HOUR));
             timer.setMinute(bundle.getInt(AppUtility.MINUTE));
             timer.setSecond(bundle.getInt(AppUtility.SECOND));
-
+            realm.commitTransaction();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.placeholder, setNotificationFragment, AppUtility.SET_NOTIFICATION_FRAGMENT);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -85,6 +100,7 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
 
         } else if (SCREEN == AppUtility.NOTIFICATION_INPUT_SCREEN) {
 
+            realm.beginTransaction();
             if (bundle.containsKey(AppUtility.WIFI)) {
                 Timer_WifiState wifiState = new Timer_WifiState(bundle.getBoolean(AppUtility.WIFI_STATE));
                 timer.setWifiState(wifiState);
@@ -108,16 +124,10 @@ public class CreateTimerActivity extends AppCompatActivity implements OnNextButt
             String alertFrequency = bundle.getString(AppUtility.NOTIFICATION_FREQUENCY);
             timer.setAlertFrequency(alertFrequency);
 
-            Realm realm = Realm.getDefaultInstance();
+            realm.copyToRealmOrUpdate(timer);
+            AppUtility.timer = timer;
 
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.copyToRealm(timer);
-                    AppUtility.timer = timer;
-                }
-            });
-
+            realm.commitTransaction();
             realm.close();
 
             Intent intent = new Intent(getApplicationContext(), ListTimerExpandedActivity.class);

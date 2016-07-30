@@ -1,12 +1,14 @@
 package co.magency.huzaima.timer.Activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
@@ -25,6 +27,7 @@ import co.magency.huzaima.timer.Model.Timer_Message;
 import co.magency.huzaima.timer.R;
 import co.magency.huzaima.timer.Utilities.AppUtility;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 
 public class AlarmRingingActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -58,12 +61,22 @@ public class AlarmRingingActivity extends AppCompatActivity implements View.OnCl
         Timer timer = realm.where(Timer.class)
                 .equalTo(AppUtility.TIMER_COLUMN_NAME, getIntent().getStringExtra(AppUtility.TIMER_NAME))
                 .findFirst();
+        timer.addChangeListener(new RealmChangeListener<Timer>() {
+            @Override
+            public void onChange(Timer element) {
+                AppUtility.showToast("onCHanged called in AlarmRingingActivity");
+                if (element.isValid())
+                    finish();
+            }
+        });
         realm.commitTransaction();
 
         if (timer.getCall() != null)
             makeCall(timer.getCall());
         if (timer.getMessage() != null)
             sendMessage(timer.getMessage());
+        if (timer.getWifiState() != null)
+            turnWifi(timer.getWifiState().isWifiEnabled());
 
         Uri alarmTone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         r = RingtoneManager.getRingtone(getApplicationContext(), alarmTone);
@@ -129,6 +142,11 @@ public class AlarmRingingActivity extends AppCompatActivity implements View.OnCl
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(m.getTo(), null, m.getMessage(), null, null);
         AppUtility.showToast("Message sent");
+    }
+
+    private void turnWifi(boolean wifiState) {
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager.setWifiEnabled(wifiState);
     }
 
     @Override
