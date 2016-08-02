@@ -83,6 +83,22 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
         }
 
         recyclerView.setAdapter(timerRecyclerViewAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    addTimer.hide();
+                } else if (dy < 0) {
+                    addTimer.show();
+                }
+            }
+        });
     }
 
     @Override
