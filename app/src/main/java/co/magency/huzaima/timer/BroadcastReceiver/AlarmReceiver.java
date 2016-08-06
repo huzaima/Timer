@@ -53,7 +53,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         android.support.v4.app.NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setContentTitle("Timer: " + intent.getStringExtra(AppUtility.TIMER_NAME))
                 .setContentText("Lapse " + intent.getIntExtra(AppUtility.TIMER_LAPSE, 0) + " completed")
-                .setSmallIcon(R.drawable.timerclock2)
+                .setSmallIcon(R.drawable.timerclock)
                 .setSound(uri);
 
         manager.cancel(11111111);
