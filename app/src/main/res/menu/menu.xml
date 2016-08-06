@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/deleteall"
+        android:title="Delete all timers"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/sort"
         android:icon="@drawable/ic_sort_white_18px"
         android:title="Sort"

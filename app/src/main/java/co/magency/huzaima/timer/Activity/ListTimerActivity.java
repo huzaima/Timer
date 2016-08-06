@@ -146,6 +146,20 @@ public class ListTimerActivity extends AppCompatActivity implements View.OnClick
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+            case R.id.deleteall:
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.where(Timer.class).findAll().deleteAllFromRealm();
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        findViewById(R.id.no_timers_added).setVisibility(View.VISIBLE);
+                        AppUtility.showToast("All timers deleted");
+                    }
+                });
+                break;
             case R.id.sort:
                 new AlertDialog.Builder(ListTimerActivity.this)
                         .setTitle("Choose sort order")
