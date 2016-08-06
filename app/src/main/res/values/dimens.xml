@@ -3,6 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="swipe_to_delete_drawable">16dp</dimen>
+
     <!-- set timer activity -->
     <dimen name="button_text_size">40sp</dimen>
 
